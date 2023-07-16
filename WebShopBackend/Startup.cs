@@ -19,6 +19,13 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccess.Mapping;
+using Data.Repository;
+using Data.Repository.Interfaces;
+using Data.Repository.UnitOfWork;
+using DataAccess.Services.Interfaces;
+using DataAccess.Services;
+using DataAccess.Helpers;
+using DataAccess.Helpers.Interfaces;
 
 namespace WebShopBackend
 {
@@ -43,7 +50,12 @@ namespace WebShopBackend
 
             CorsConfig(services);
 
+            AddRepositories(services);
+
             MappConfig(services);
+
+            ServicesConfig(services);
+
             services.AddDbContext<WebShopDbContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("WebShopDbConnectionString")));
 
@@ -148,6 +160,30 @@ namespace WebShopBackend
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+        public void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IAdminRepository, AdminRepository>();
+
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            services.AddScoped<ISalesmanRepository, SalesmanRepository>();
+
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddScoped<IItemRepository, ItemRepository>();
+
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+        }
+        public void ServicesConfig(IServiceCollection services)
+        {
+            services.AddScoped<IAuthService, AuthService>();
+            //services.AddScoped<IUserHelper, UserHelper>();
+            //services.AddScoped<IAuthHelper, AuthHelper>();
+
+
         }
     }
 }

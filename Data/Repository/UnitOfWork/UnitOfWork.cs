@@ -11,6 +11,17 @@ namespace Data.Repository.UnitOfWork
     public class UnitOfWork:IUnitOfWork
     {
         private WebShopDbContext _context;
+       
+        public UnitOfWork(WebShopDbContext context)
+        {
+            _context = context;
+            AdminRepository = new AdminRepository(context);
+            CustomerRepository = new CustomerRepository(context);
+            SalesmanRepository = new SalesmanRepository(context);
+            ArticleRepository = new ArticleRepository(context);
+            ItemRepository = new ItemRepository(context);
+            OrderRepository = new OrderRepository(context);
+        }
         public IAdminRepository AdminRepository { get; set; }
 
         public ICustomerRepository CustomerRepository { get; set; }
@@ -23,16 +34,6 @@ namespace Data.Repository.UnitOfWork
 
         public IOrderRepository OrderRepository { get; set; }
 
-        public UnitOfWork(WebShopDbContext context)
-        {
-            _context = context;
-            AdminRepository = new AdminRepository(context);
-            CustomerRepository = new CustomerRepository(context);
-            SalesmanRepository = new SalesmanRepository(context);
-            ArticleRepository = new ArticleRepository(context);
-            ItemRepository = new ItemRepository(context);
-            OrderRepository = new OrderRepository(context);
-        }
         public void SaveChanges()
         {
             _context.SaveChanges();
