@@ -181,7 +181,7 @@ namespace WebShopBackend
         {
             services.AddScoped<IAuthService, AuthService>();
             //services.AddScoped<IUserHelper, UserHelper>();
-            //services.AddScoped<IAuthHelper, AuthHelper>();
+            services.AddScoped<ITokenHelper, TokenHelper>();
 
 
         }

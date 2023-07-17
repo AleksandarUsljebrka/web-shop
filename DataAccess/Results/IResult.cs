@@ -13,5 +13,6 @@ namespace DataAccess.Results
         string ErrorMess { get; set; }
         IDto Dto { get; set; }
         ErrorCode ErrorCode { get; set; }
+        string Token { get; set; }
     }
 }

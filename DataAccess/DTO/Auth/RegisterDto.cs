@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.DTO.Auth
 {
-    public class RegisterDto
+    public class RegisterDto : IDto
     {
 		[Required(ErrorMessage ="Please enter first name!")]
 		public string Firstname { get; set; }

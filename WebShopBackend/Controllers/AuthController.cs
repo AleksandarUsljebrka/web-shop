@@ -48,5 +48,27 @@ namespace WebShopBackend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromForm]  LoginDto logDto)
+        {
+            IResult result;
+            result = _authService.Login(logDto);
+            try
+            {
+                if (!result.Successfull)
+                {
+                    return StatusCode((int)result.ErrorCode, result.ErrorMess);
+                }
+                else
+                    return Ok(result.Token);
+            }
+            catch(Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            }
+        }
+
     }
 }

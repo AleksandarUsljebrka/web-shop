@@ -21,9 +21,11 @@ namespace DataAccess.Services
         private readonly IUserHelper _userHelper;
         private readonly IAuthHelper _authHelper = new AuthHelper();
         private readonly IMapper _mapper;
+        private readonly ITokenHelper _tokenHelper;
 
-        public AuthService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, ITokenHelper tokenHelper)
         {
+            _tokenHelper = tokenHelper;
             _unitOfWork = unitOfWork;
             _userHelper = new UserHelper(_unitOfWork);
             _mapper = mapper;
@@ -69,6 +71,25 @@ namespace DataAccess.Services
 
             _unitOfWork.SaveChanges();
             return new Result(true);
+        }
+
+        public IResult Login(LoginDto logDto)
+        {
+            IResult result;
+            IUser user = _userHelper.UserByUsername(logDto.Username);
+            if (user == null)
+            {
+                result = new Result(false, ErrorCode.NotFound, "User not found");
+                return result;
+            }
+            if (!_tokenHelper.PasswordValidation(logDto.Password, user.Password))
+            {
+                result = new Result(false, ErrorCode.BadRequest, "Incorrect password");
+                return result;
+            }
+            string token = _tokenHelper.GetToken(user);
+            result = new Result(true, token);
+            return result;
         }
     }
 }
