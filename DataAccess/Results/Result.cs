@@ -35,5 +35,10 @@ namespace DataAccess.Results
             Successfull = successfull;
             Token = token;
         }
+        public Result(bool successfull, IDto dto)
+        {
+            Successfull = successfull;
+            Dto = dto;
+        }
     }
 }

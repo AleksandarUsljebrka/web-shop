@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace WebShopBackend.Controllers
 {
+    [Route("auth")]
     [ApiController]
     public class AuthController : Controller
     {

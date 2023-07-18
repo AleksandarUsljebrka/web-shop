@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace DataAccess.Services.Interfaces
 {
     public interface IAdminService
     {
+        public IResult GetAllSalesmen();
+        public IResult GetAllOrders();
+        public IResult GetOrder(long id);
     }
 }

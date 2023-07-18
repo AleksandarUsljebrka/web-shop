@@ -60,6 +60,7 @@ namespace DataAccess.Services
             else if(regDto.Role.Contains("Salesman"))
             {
                 Salesman salesman = _mapper.Map<Salesman>(regDto);
+                salesman.ApprovalStatus = SalesmanStatus.Pending;
                 salesman.Password = _authHelper.HashPassword(regDto.Password);
                 _unitOfWork.SalesmanRepository.Add(salesman);
             }
