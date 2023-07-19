@@ -59,5 +59,22 @@ namespace DataAccess.Helpers
             }
             return null;
         }
+
+        public IUser UserByToken(string token, ITokenHelper _tokenHelper)
+        {
+            long id = int.Parse(_tokenHelper.GetClaim(token, "id"));
+            string role = _tokenHelper.GetClaim(token, "role");
+            IUser user;
+            if (role.Equals("Admin") && _unitOfWork.AdminRepository.FindFirst(a => a.Id == id) is Admin admin)
+                user = (IUser)admin;
+            else if (role.Equals("Customer") && _unitOfWork.CustomerRepository.FindFirst(c => c.Id == id) is Customer customer)
+                user = (IUser)customer;
+            else if (role.Equals("Salesman") && _unitOfWork.SalesmanRepository.FindFirst(s => s.Id == id) is Salesman salesman)
+                user = (IUser)salesman;
+            else 
+                return null;
+            
+            return user;
+        }
     }
 }

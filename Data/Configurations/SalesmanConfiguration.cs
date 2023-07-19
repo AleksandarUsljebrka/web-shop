@@ -33,7 +33,7 @@ namespace Data.Configurations
 
 			builder.HasMany(x => x.Articles)
 				.WithOne(x => x.Salesman)
-				.HasForeignKey(x => x.SellerId)
+				.HasForeignKey(x => x.SalesmanId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}

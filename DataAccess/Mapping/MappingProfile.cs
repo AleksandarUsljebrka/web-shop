@@ -26,7 +26,7 @@ namespace DataAccess.Mapping
 
             //orders
             CreateMap<Order, OrderDto>().ReverseMap();
-
+            CreateMap<Item, ItemDto>().ReverseMap();
         }
     }
 }
