@@ -36,5 +36,42 @@ namespace DataAccess.Helpers
             }
             return finishedOrders;
         }
+        public List<IOrder> GetPendingOrders(List<IOrder> orders)
+        {
+            int passedTime;
+            int leftTime;
+            List<IOrder> pendingOrders = new List<IOrder>();
+            foreach (var order in orders)
+            {
+                passedTime = (int)(DateTime.Now - order.PlacedTime).TotalSeconds;
+                leftTime = order.DeliveryDurationInSeconds - passedTime;
+                if (leftTime > 0)
+                    pendingOrders.Add(order);
+            }
+            return pendingOrders;
+        }
+
+        public List<IOrder> GetOrdersOfCustomer(List<IOrder> allOrders, long id)
+        {
+            List<IOrder> ordersOfCustomer = new List<IOrder>();
+
+            foreach (var order in allOrders)
+            {
+                if (order.CustomerId == id)
+                    ordersOfCustomer.Add(order);
+            }
+
+            return ordersOfCustomer;
+        }
+        
+        public bool CanCancel(IOrder order)
+        {
+            int passedTime = (int)(DateTime.Now - order.PlacedTime).TotalSeconds;
+            
+            if (passedTime > 60)
+                return false;
+            else
+                return true;
+        }
     }
 }

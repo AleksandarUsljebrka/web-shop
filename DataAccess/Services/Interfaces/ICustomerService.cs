@@ -1,4 +1,5 @@
-﻿using DataAccess.Results;
+﻿using DataAccess.DTO.Order;
+using DataAccess.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace DataAccess.Services.Interfaces
     {
         public IResult GetArticles();
         public IResult GetFinishedOrders(string token);
+        public IResult OrderDetails(long id);
+        public IResult PendingOrders(string token);
+        public IResult PlaceOrder(PlaceOrderDto placedOrderDto, string token);
+        public IResult CancelOrder(long id, string token);
+
 
     }
 }

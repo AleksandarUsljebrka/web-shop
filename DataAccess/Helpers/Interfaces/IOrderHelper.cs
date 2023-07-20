@@ -11,6 +11,9 @@ namespace DataAccess.Helpers.Interfaces
     {
         public string GetRemainingTime(DateTime placedTime, int duration);
         public List<IOrder> GetFinishedOrders(List<IOrder> orders);
+        public List<IOrder> GetOrdersOfCustomer(List<IOrder> allOrders, long id);
+        public List<IOrder> GetPendingOrders(List<IOrder> orders);
+        public bool CanCancel(IOrder order);
 
     }
 }
