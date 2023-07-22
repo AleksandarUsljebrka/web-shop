@@ -24,9 +24,9 @@ namespace DataAccess.Services
         private readonly IUserHelper _userHelper;
         private readonly ITokenHelper _tokenHelper;
         private readonly IOrderHelper _orderHelper = new OrderHelper();
-        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper, IUserHelper userHelper, ITokenHelper tokenHelper)
+        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper,  ITokenHelper tokenHelper)
         {
-            _userHelper = userHelper;
+            _userHelper = new UserHelper(unitOfWork);
             _unitOfWork = unitOfWork;
             _tokenHelper = tokenHelper;
             _mapper = mapper;
@@ -158,24 +158,24 @@ namespace DataAccess.Services
                 addedArticles.Add(article);
             }
 
-            IOrder order = _mapper.Map<IOrder>(placedOrderDto);
+            Order order = _mapper.Map<Order>(placedOrderDto);
 
             order.CustomerId = customer.Id;
 
             foreach (var item in order.Items)
             {
-                order.TotalPrice += (item.PricePerUnit * item.Quantity);
-                IArticle article = addedArticles.Find(a => a.Id == item.Id);
+                IArticle article = addedArticles.Find(a => a.Id == item.ArticleId);
                 item.PricePerUnit = article.Price;
                 item.ArticleName = article.Name;
                 article.Quantity -= item.Quantity;
+                order.TotalPrice += (item.PricePerUnit * item.Quantity);
                 _unitOfWork.ItemRepository.Add(item);
                 _unitOfWork.ArticleRepository.Update((Article)article);
             }
 
 			order.DeliveryDurationInSeconds = new Random().Next(3600, 7200);
 
-            // order.TotalPrice += deliveryPrice;
+            order.TotalPrice += deliveryPrice;
 
             order.PlacedTime = DateTime.Now;
             order.DeliveryDurationInSeconds = new Random().Next(3600, 7200);
@@ -197,7 +197,7 @@ namespace DataAccess.Services
                 return result;
             }
 
-            IOrder order = _unitOfWork.OrderRepository.FindFirst(o => o.Id == id);
+            IOrder order = _unitOfWork.OrderRepository.FindFirstIncludeItems(o => o.Id == id);
             if (order == null)
             {
                 result = new Result(false, ErrorCode.NotFound, "Order doesn't exists!");
@@ -210,8 +210,9 @@ namespace DataAccess.Services
             }
             foreach(var item in order.Items)
             {
-                IArticle article = _unitOfWork.ArticleRepository.FindFirst(a => a.Id == item.Id);
+                IArticle article = _unitOfWork.ArticleRepository.FindFirst(a => a.Id == item.ArticleId);
                 article.Quantity += item.Quantity;
+                _unitOfWork.ArticleRepository.Update((Article)article);
             }
 
             _unitOfWork.OrderRepository.Delete((Order)order);

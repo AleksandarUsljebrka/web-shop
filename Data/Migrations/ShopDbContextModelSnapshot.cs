@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(WebShopDbContext))]
-    partial class WebShopDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ShopDbContext))]
+    partial class ShopDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -82,12 +82,12 @@ namespace Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<long>("SellerId")
+                    b.Property<long>("SalesmanId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("SalesmanId");
 
                     b.ToTable("Articles");
                 });
@@ -245,7 +245,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Models.Salesman", "Salesman")
                         .WithMany("Articles")
-                        .HasForeignKey("SellerId")
+                        .HasForeignKey("SalesmanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

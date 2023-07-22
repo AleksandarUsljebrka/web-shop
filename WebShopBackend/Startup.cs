@@ -56,8 +56,8 @@ namespace WebShopBackend
 
             ServicesConfig(services);
 
-            services.AddDbContext<WebShopDbContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("WebShopDbConnectionString")));
+            services.AddDbContext<ShopDbContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("ShopDbConnectionString")));
 
         }
 
@@ -180,8 +180,12 @@ namespace WebShopBackend
         public void ServicesConfig(IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
-            //services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<ISalesmanService, SalesmanService>();
             services.AddScoped<ITokenHelper, TokenHelper>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IUserService, UserService>();
+
 
 
         }

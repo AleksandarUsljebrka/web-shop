@@ -10,9 +10,9 @@ namespace Data.Repository.UnitOfWork
 {
     public class UnitOfWork:IUnitOfWork
     {
-        private WebShopDbContext _context;
+        private ShopDbContext _context;
        
-        public UnitOfWork(WebShopDbContext context)
+        public UnitOfWork(ShopDbContext context)
         {
             _context = context;
             AdminRepository = new AdminRepository(context);

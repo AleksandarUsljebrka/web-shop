@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(WebShopDbContext))]
-    [Migration("20230714161431_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(ShopDbContext))]
+    [Migration("20230721150740_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,12 +84,12 @@ namespace Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<long>("SellerId")
+                    b.Property<long>("SalesmanId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("SalesmanId");
 
                     b.ToTable("Articles");
                 });
@@ -247,7 +247,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Models.Salesman", "Salesman")
                         .WithMany("Articles")
-                        .HasForeignKey("SellerId")
+                        .HasForeignKey("SalesmanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

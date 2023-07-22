@@ -11,7 +11,7 @@ namespace Data.Repository
 {
     public class AdminRepository:Repository<Admin>, IAdminRepository
     {
-        public AdminRepository(WebShopDbContext context) : base(context)
+        public AdminRepository(ShopDbContext context) : base(context)
         {
 
         }

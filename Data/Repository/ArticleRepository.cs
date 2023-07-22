@@ -11,7 +11,7 @@ namespace Data.Repository
 {
     public class ArticleRepository: Repository<Article>, IArticleRepository
     {
-        public ArticleRepository(WebShopDbContext context):base(context)
+        public ArticleRepository(ShopDbContext context):base(context)
         {
 
         }

@@ -11,7 +11,7 @@ namespace Data.Repository
 {
     public class CustomerRepository: Repository<Customer>, ICustomerRepository
     {
-        public CustomerRepository(WebShopDbContext context):base(context)
+        public CustomerRepository(ShopDbContext context):base(context)
         {
 
         }

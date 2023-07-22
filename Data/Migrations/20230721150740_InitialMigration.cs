@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -103,14 +103,14 @@ namespace Data.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     ProductImage = table.Column<string>(type: "varchar(100)", nullable: true),
-                    SellerId = table.Column<long>(type: "bigint", nullable: false)
+                    SalesmanId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Articles_Salesmen_SellerId",
-                        column: x => x.SellerId,
+                        name: "FK_Articles_Salesmen_SalesmanId",
+                        column: x => x.SalesmanId,
                         principalTable: "Salesmen",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -152,9 +152,9 @@ namespace Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_SellerId",
+                name: "IX_Articles_SalesmanId",
                 table: "Articles",
-                column: "SellerId");
+                column: "SalesmanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_Username",

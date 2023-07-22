@@ -12,9 +12,9 @@ namespace Data.Repository
     public class Repository<T>: IRepository<T> where T:class
     {
 		private readonly object lockObj = new object();
-		protected readonly WebShopDbContext _context;
+		protected readonly ShopDbContext _context;
 
-		public Repository(WebShopDbContext context)
+		public Repository(ShopDbContext context)
 		{
 			_context = context;
 		}

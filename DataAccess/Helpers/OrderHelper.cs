@@ -68,7 +68,7 @@ namespace DataAccess.Helpers
         {
             int passedTime = (int)(DateTime.Now - order.PlacedTime).TotalSeconds;
             
-            if (passedTime > 60)
+            if (passedTime > 3600)
                 return false;
             else
                 return true;

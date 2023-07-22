@@ -61,7 +61,7 @@ namespace DataAccess.Services
             IResult result;
 
             IOrder order = _unitOfWork.OrderRepository.GetById(id);
-            List<IItem> allItems = _unitOfWork.ItemRepository.GetAll().ToList<IItem>();
+            List<IItem> allItems = _unitOfWork.ItemRepository.FindAllIncludeArticles(i => i.OrderId == id).ToList<IItem>();
             
             if(order == null)
             {
@@ -71,11 +71,11 @@ namespace DataAccess.Services
             
             OrderDto orderDto = _mapper.Map<OrderDto>(order);
 
-            foreach(var item in allItems)
-            {
-                if (item.OrderId != id)
-                    allItems.Remove(item);
-            }
+            //foreach(var item in allItems)
+            //{
+            //    if (item.OrderId != id)
+            //        allItems.Remove(item);
+            //}
             orderDto.Items = _mapper.Map<List<ItemDto>>(allItems);
 
             orderDto.RemainingTime = _orderHelper.GetRemainingTime(orderDto.PlacedTime, order.DeliveryDurationInSeconds);

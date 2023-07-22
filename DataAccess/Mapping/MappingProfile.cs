@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Data.Models;
+using DataAccess.DTO.Article;
 using DataAccess.DTO.Auth;
 using DataAccess.DTO.Order;
 using DataAccess.DTO.Salesman;
+using DataAccess.DTO.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +25,20 @@ namespace DataAccess.Mapping
 
             //users
             CreateMap<Salesman, SalesmanDto>().ReverseMap();
-
+            CreateMap<User, UserDto>().ReverseMap();
             //orders
             CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<Order, PlaceOrderDto>().ReverseMap();
             CreateMap<Item, ItemDto>().ReverseMap();
+            CreateMap<Item, PlacedItemDto>().ReverseMap();
+
+            //articles
+            CreateMap<Article, AddArticleDto>().ReverseMap();
+            CreateMap<Article, UpdateArticleDto>().ReverseMap();
+            CreateMap<Article, ArticleDto>().ReverseMap();
+
+
+
         }
     }
 }

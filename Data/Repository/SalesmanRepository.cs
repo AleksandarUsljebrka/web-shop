@@ -11,7 +11,7 @@ namespace Data.Repository
 {
     public class SalesmanRepository: Repository<Salesman>, ISalesmanRepository
     {
-        public SalesmanRepository(WebShopDbContext context):base(context)
+        public SalesmanRepository(ShopDbContext context):base(context)
         {
         }
     }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Data.Configurations.Context
 {
-    public class WebShopDbContext:DbContext
+    public class ShopDbContext:DbContext
     {
-		public WebShopDbContext(DbContextOptions options) : base(options)
+		public ShopDbContext(DbContextOptions options) : base(options)
 		{
 		}
 
@@ -25,13 +25,13 @@ namespace Data.Configurations.Context
 		public DbSet<Order> Orders { get; set; }
 
 		public DbSet<Item> Items { get; set; }
-		
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebShopDbContext).Assembly);
+			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShopDbContext).Assembly);
 		}
 	}
 }

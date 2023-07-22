@@ -1,4 +1,5 @@
-﻿using DataAccess.Results;
+﻿using DataAccess.DTO.Salesman;
+using DataAccess.Results;
 using DataAccess.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -72,6 +73,22 @@ namespace WebShopBackend.Controllers
                 return Ok(result.Dto);
             }
             catch(Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut("salesman-status")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult UpdateSalesmanStatus(SalesmanStatusDto salesmanStatusDto)
+        {
+            try
+            {
+                IResult result = _adminService.UpdateSalesmanStatus(salesmanStatusDto);
+                if (!result.Successfull)
+                    return StatusCode((int)result.ErrorCode, result.ErrorMess);
+                return Ok();
+            }
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

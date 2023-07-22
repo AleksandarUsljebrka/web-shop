@@ -17,6 +17,11 @@ namespace WebShopBackend.Controllers
     {
         private readonly ICustomerService _customerService;
 
+        public CustomerController(ICustomerService customerService)
+        {
+            _customerService = customerService;
+        }
+
         [HttpGet("all-ordes")]
         [Authorize(Roles ="Customer")]
         public IActionResult GetArticles()
@@ -111,7 +116,7 @@ namespace WebShopBackend.Controllers
                 }
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
