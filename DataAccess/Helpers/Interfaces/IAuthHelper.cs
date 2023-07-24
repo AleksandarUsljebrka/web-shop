@@ -8,9 +8,10 @@ namespace DataAccess.Helpers.Interfaces
 {
     public interface IAuthHelper
     {
-        public bool IsValidEmail(string email);
-        public string HashPassword(string password);
+        bool IsValidEmail(string email);
+        string HashPassword(string password);
 
+        bool IsPasswordValid(string pass, string hashPass);
 
     }
 }

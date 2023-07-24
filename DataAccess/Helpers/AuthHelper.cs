@@ -32,7 +32,11 @@ namespace DataAccess.Helpers
                 return false;
             }
         }
-      
+    
+        public bool IsPasswordValid(string pass, string hashPass)
+        {
+            return BCrypt.Net.BCrypt.Verify(pass, hashPass);
+        }
 
     }
 }
