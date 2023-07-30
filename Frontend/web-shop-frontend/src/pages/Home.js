@@ -1,31 +1,27 @@
+import {  Typography, Button, Container } from '@mui/material';
+import {  NavLink } from 'react-router-dom';
+
 const Home = ()=>{
+
+   
+
 return (
-    <div>
-    <h1>Welcome to Our Website</h1>
-    <p>If you have an account, please login:</p>
-    <form>
-      <label htmlFor="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-      <br />
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-      <br />
-      <button type="submit">Login</button>
-    </form>
-    <p>If you don't have an account, please register:</p>
-    <form>
-      <label htmlFor="name">Name:</label>
-      <input type="text" id="name" name="name" required />
-      <br />
-      <label htmlFor="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-      <br />
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-      <br />
-      <button type="submit">Register</button>
-    </form>
-  </div>
+    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <div>
+            <Typography variant="h4" gutterBottom>
+                Welcome to Online Shop!
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                Please make an account to get started, if you already have one, sign in.
+            </Typography>
+            <Button variant="contained" color="primary" to="/login" component={NavLink} sx={{ marginRight: 2 }}>
+                Sign in
+            </Button>
+            <Button variant="contained" color="secondary" to="/registration" component={NavLink}>
+                Make account
+            </Button>
+            </div>
+          </Container>
 );
 }
 
