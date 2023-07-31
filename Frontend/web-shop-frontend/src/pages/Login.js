@@ -1,5 +1,6 @@
-import { React, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { React, useState, useContext, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import AuthContext  from "../context/AuthContext";
 import {
   AppBar,
   Toolbar,
@@ -8,10 +9,7 @@ import {
   TextField,
   Button,
   Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+ 
 } from "@mui/material";
 import * as yup from "yup";
 import useService from "../services/useService";
@@ -27,6 +25,8 @@ const loginSchema = yup.object().shape({
 const Login = () => {
 
   const { loginRequest, isLoading, error, statusCode, data } = useService();
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -42,7 +42,7 @@ const Login = () => {
       console.log(formData)
       loginRequest(formData);
 
-      console.log("Registration successful");
+      console.log("Login successful");
     } catch (errors) {
       console.log(formData)
 
@@ -62,6 +62,26 @@ const Login = () => {
     });
     console.log(value);
   };
+
+  
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    } else if (statusCode === 200 && !error) {
+      console.log("successfull");
+      console.log(data);
+    } else if (statusCode !== 200 && error) {
+      console.log(statusCode, error);
+    }
+  }, [isLoading, statusCode, error]);
+
+  useEffect(() => {
+    if (data && statusCode === 200 && !authContext.isLoggedin) {
+      authContext.handleLogin(data);
+
+      navigate('/');
+    }
+  }, [statusCode, data, authContext, navigate]);
 
   return (
     <div>
