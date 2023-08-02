@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 import useService from "../services/useService";
+import Header from "../components/Header";
 
 const registrationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -25,7 +26,7 @@ const registrationSchema = yup.object().shape({
   birthDate: yup.date().required("Birth date is required"),
   password: yup
     .string()
-    .min(6, "Password must be at least 6 characters")
+    .min(4, "Password must be at least 6 characters")
     .required("Password is required"),
   confirmPassword: yup
     .string()
@@ -91,17 +92,7 @@ const Registration = () => {
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Online Shop
-          </Typography>
-          
-          <Button color="inherit" component={NavLink} to="/">
-            Home
-          </Button>
-        </Toolbar>
-      </AppBar>
+      
       <Container
         sx={{
           display: "flex",

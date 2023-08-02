@@ -2,7 +2,7 @@
 import jwtDecode from 'jwt-decode';
 
 export const getToken = () => {
-    const token = window.localStorage.getItem('token');
+    const token = getRawToken();
 
     if (!token) {
       return null;

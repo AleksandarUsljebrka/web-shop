@@ -5,6 +5,8 @@ import useHttp from './useHttp'
 const baseUrl = process.env.REACT_APP_BASE_URL;
 const registerUrl = baseUrl + process.env.REACT_APP_REGISTER_URL;
 const loginUrl = baseUrl + process.env.REACT_APP_LOGIN_URL;
+const newArticleUrl = baseUrl + process.env.REACT_APP_POST_NEW_ARTICLE_URL;
+const getSalesmanArticlesUrl = baseUrl + process.env.REACT_APP_SALESMAN_ARTICLES_URL;
 
 const useService = () => {
 
@@ -15,7 +17,9 @@ const useService = () => {
         error,
         statusCode,
         postRequestFormData,
-        postRequest
+        postRequest,
+        getRequest,
+        resetHttp
     } = useHttp();
 
     const registerRequest = useCallback(
@@ -33,14 +37,27 @@ const useService = () => {
         [postRequest]
       );
 
+    const newArticleRequest = useCallback(
+    (article) => {
+        postRequestFormData(newArticleUrl, article);
+    },
+    [postRequestFormData]
+    );
 
+    const getSalesmanArticlesRequest = useCallback(() => {
+        getRequest(getSalesmanArticlesUrl);
+      }, [getRequest]);
+    
     return{
         data,
         isLoading,
         error,
         statusCode,
+        clearRequest:resetHttp,
         registerRequest,
-        loginRequest
+        loginRequest,
+        newArticleRequest,
+        getSalesmanArticlesRequest
     };
 }
 

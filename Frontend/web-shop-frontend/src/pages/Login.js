@@ -2,8 +2,6 @@ import { React, useState, useContext, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext  from "../context/AuthContext";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Container,
   TextField,
@@ -18,7 +16,7 @@ const loginSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
   password: yup
     .string()
-    .min(6, "Password must be at least 6 characters")
+    .min(4, "Password must be at least 6 characters")
     .required("Password is required")
 });
 
@@ -43,6 +41,8 @@ const Login = () => {
       loginRequest(formData);
 
       console.log("Login successful");
+      console.log(authContext.isLoggedin)
+      console.log(statusCode)
     } catch (errors) {
       console.log(formData)
 
@@ -69,7 +69,9 @@ const Login = () => {
       return;
     } else if (statusCode === 200 && !error) {
       console.log("successfull");
+      console.log(statusCode);
       console.log(data);
+
     } else if (statusCode !== 200 && error) {
       console.log(statusCode, error);
     }
@@ -77,7 +79,8 @@ const Login = () => {
 
   useEffect(() => {
     if (data && statusCode === 200 && !authContext.isLoggedin) {
-      authContext.handleLogin(data);
+      authContext.login(data);
+      console.log(authContext.isLoggedin)
 
       navigate('/');
     }
@@ -85,17 +88,7 @@ const Login = () => {
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Online Shop
-          </Typography>
-          
-          <Button color="inherit" component={NavLink} to="/">
-            Home
-          </Button>
-        </Toolbar>
-      </AppBar>
+      
       <Container
         sx={{
           display: "flex",
