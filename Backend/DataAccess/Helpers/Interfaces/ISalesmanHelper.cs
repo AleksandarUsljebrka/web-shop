@@ -1,10 +1,6 @@
 ﻿using Data.Models.Interfaces;
 using DataAccess.DTO.Article;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Helpers.Interfaces
 {

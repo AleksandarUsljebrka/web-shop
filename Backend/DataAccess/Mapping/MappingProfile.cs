@@ -5,11 +5,6 @@ using DataAccess.DTO.Auth;
 using DataAccess.DTO.Order;
 using DataAccess.DTO.Salesman;
 using DataAccess.DTO.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Mapping
 {

@@ -1,13 +1,10 @@
 ﻿using Data.Models.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Models
 {
-	public class Order : IOrder
+    public class Order : IOrder
 	{
 		public long Id { get; set; }
 

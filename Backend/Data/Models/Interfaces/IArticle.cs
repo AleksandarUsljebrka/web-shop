@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Data.Models.Interfaces
 {
-	public interface IArticle
+    public interface IArticle
 	{
 		long Id { get; set; }
 

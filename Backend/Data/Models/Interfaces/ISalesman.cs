@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Data.Models.Interfaces
 {
-	public interface ISalesman : IUser
+    public interface ISalesman : IUser
 	{
 		/// <summary>
 		/// Navigational property specifying that a seller can have many articles.

@@ -1,11 +1,6 @@
 ﻿using Data.Repository.UnitOfWork;
 using DataAccess.DTO.Auth;
 using DataAccess.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccess.Helpers.Interfaces;
 using Data.Models.Interfaces;
 using Data.Models;
@@ -89,7 +84,9 @@ namespace DataAccess.Services
                 return result;
             }
             string token = _tokenHelper.GetToken(user);
-            result = new Result(true, token);
+            TokenDto tokenDto = new TokenDto(token);
+            
+            result = new Result(true, tokenDto);
             return result;
         }
     }

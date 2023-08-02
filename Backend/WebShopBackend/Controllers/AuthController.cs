@@ -4,10 +4,7 @@ using DataAccess.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace WebShopBackend.Controllers
 {
@@ -51,7 +48,7 @@ namespace WebShopBackend.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromForm]  LoginDto logDto)
+        public IActionResult Login([FromBody]LoginDto logDto)
         {
             IResult result;
             result = _authService.Login(logDto);
@@ -62,7 +59,7 @@ namespace WebShopBackend.Controllers
                     return StatusCode((int)result.ErrorCode, result.ErrorMess);
                 }
                 else
-                    return Ok(result.Token);
+                    return Ok(result.Dto);
             }
             catch(Exception)
             {

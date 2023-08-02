@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Results
+﻿namespace DataAccess.Results
 {
-	public enum ErrorCode
+    public enum ErrorCode
 	{
 		BadRequest = 400,
 		Unauthorized = 401,

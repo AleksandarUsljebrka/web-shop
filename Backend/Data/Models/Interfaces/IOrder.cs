@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Models.Interfaces
 {
-	public interface IOrder
+    public interface IOrder
 	{
 		long Id { get; set; }
 

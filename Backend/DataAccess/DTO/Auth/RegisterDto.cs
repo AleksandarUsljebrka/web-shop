@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.DTO.Auth
 {
@@ -24,15 +19,15 @@ namespace DataAccess.DTO.Auth
 
 		[Required(ErrorMessage = "Please enter password!")]
 		public string Password { get; set; }
-
+		public string ConfirmPassword { get; set; }
 		[Required(ErrorMessage = "Please enter Address!")]
 		public string Address { get; set; }
 
 		[Required(ErrorMessage = "Please enter role!")]
 		public string Role { get; set; }
 
-		[Required(ErrorMessage = "Please enter profile image!")]
-		public IFormFile ProfileImage { get; set; }
+		//[Required(ErrorMessage = "Please enter profile image!")]
+		//public IFormFile ProfileImage { get; set; }
 
 		[Required(ErrorMessage = "Please enter birthdate!")]
 		public DateTime Birthdate { get; set; }

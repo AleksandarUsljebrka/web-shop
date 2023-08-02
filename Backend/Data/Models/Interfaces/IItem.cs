@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Models.Interfaces
+﻿namespace Data.Models.Interfaces
 {
-	public interface IItem
+    public interface IItem
 	{
 		/// <summary>
 		/// Primary key.
