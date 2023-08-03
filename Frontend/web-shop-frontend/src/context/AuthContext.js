@@ -31,7 +31,7 @@ export const AuthContextProvider=({children})=>{
     const logout = useCallback(()=>{
         tokenObj.removeToken();
         setIsLoggedin(false);
-        setUser(null);
+        setUser(emptyUser);
     }, []);
 
     const loadUser = useCallback(() => {
@@ -67,4 +67,11 @@ export const AuthContextProvider=({children})=>{
       );
 };
 
+
+const emptyUser = {
+    username: '',
+    role: '',
+    status: null,
+    rawToken: '',
+  };
 export default AuthContext;

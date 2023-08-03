@@ -32,7 +32,7 @@ const NewArticle = () => {
       const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-          await validationSchema(formData, { abortEarly: false });
+          await validationSchema.validate(formData, { abortEarly: false });
           console.log(formData)
           newArticleRequest(formData);
     
@@ -84,7 +84,7 @@ const NewArticle = () => {
             backgroundColor: "#fff",
         }}
         >
-        <Typography variant="h5" gutterBottom>
+        <Typography color={'black'} variant="h5" gutterBottom>
             New Article
         </Typography>
         <TextField
@@ -134,6 +134,7 @@ const NewArticle = () => {
             variant="contained"
             color="primary"
             sx={{ width: "100%", marginTop: 2 }}
+            
         >
             Add Article
         </Button>

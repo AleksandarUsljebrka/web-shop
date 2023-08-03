@@ -134,6 +134,35 @@ const useHttp = (resolve) => {
     [resolve]
   );
 
+  const putRequest = useCallback(
+    (url, data) => {
+      prepare();
+
+      fetch(url, {
+        method: 'put',
+        body: JSON.stringify(data),
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + getRawToken(),
+        },
+      })
+        .then((response) => {
+          return processResponse(response);
+        })
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => {
+          setError('Error doing PUT request! ' + error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          resolve && resolve();
+        });
+    },
+    [resolve]
+  );
   const resetHttp = () => {
     setData(null);
     setError(null);
@@ -150,6 +179,7 @@ const useHttp = (resolve) => {
     postRequestFormData,
     postRequest,
     getRequest,
+    putRequest,
     resetHttp
   };
 };
