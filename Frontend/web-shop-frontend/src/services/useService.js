@@ -13,6 +13,8 @@ const getAllSalesmenUrl = baseUrl + process.env.REACT_APP_ALL_SALESMEN_URL;
 const updateArticleUrl = baseUrl + process.env.REACT_APP_UPDATE_ARTICLE_URL;
 const getArticleDetailsUrl = baseUrl + process.env.REACT_APP_GET_ARTICAL_DETAILS_URL;
 const deleteArticleUrl = baseUrl + process.env.REACT_APP_DELETE_ARTICLE_URL;
+const customerArticlesUrl = baseUrl + process.env.REACT_APP_CUSTOMER_ARTICLES_URL;
+const customerPostOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_POST_ORDER;
 const useService = () => {
   const {
     data,
@@ -83,6 +85,16 @@ const useService = () => {
     [putRequest]
   );
 
+  const getCustomerArticlesRequest = useCallback(() => {
+    getRequest(customerArticlesUrl);
+  }, [getRequest]);
+
+  const postCustomerOrderRequest = useCallback(
+    (order) => {
+      postRequest(customerPostOrderUrl, order);
+    },
+    [postRequest]
+  );
   return {
     data,
     isLoading,
@@ -97,7 +109,9 @@ const useService = () => {
     getAllSalesmenRequest,
     updateArticleRequest,
     getArticleDetailsRequest,
-    deleteArticleRequest
+    deleteArticleRequest,
+    getCustomerArticlesRequest,
+    postCustomerOrderRequest
   };
 };
 

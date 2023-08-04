@@ -11,6 +11,8 @@ import NewArticle from "./pages/salesman/NewArticle";
 import SalesmanArticles from "./pages/salesman/SalesmanArticles";
 import AllSalesmen from "./pages/admin/AllSalesmen";
 import ArticleDetails from "./components/article/ArticleDetails";
+import CustomerArticles from "./pages/customer/CustomerArticles";
+import Order from "./pages/customer/Order";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -55,6 +57,15 @@ function App() {
       {approvedSalesman && <Route path="/articles/:name" element={<Layout />}>
         <Route index element={<ArticleDetails />} />
       </Route>}
+
+      {role ==="customer" && <Route path="/articles" element={<Layout />}>
+        <Route index element={<CustomerArticles />} />
+      </Route>}
+
+      {role ==="customer" && <Route path="/order/" element={<Layout />}>
+        <Route index element={<Order />} />
+      </Route>}
+
     </Routes>
   );
 }

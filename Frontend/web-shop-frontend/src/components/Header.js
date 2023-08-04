@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import AuthContext from "../context/AuthContext";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 const appBarStyles = {
   backgroundColor: "#2196F3",
 };
@@ -21,11 +21,13 @@ const Header = () => {
     role === "salesman" && authContext.status?.toLowerCase() === "approved";
   return (
     <div>
-      <AppBar  position="static">
-        <Toolbar >
-        {false && <IconButton edge="start" color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>}
+      <AppBar position="static">
+        <Toolbar>
+          {false && (
+            <IconButton edge="start" color="inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+          )}
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Online Shop
@@ -58,8 +60,26 @@ const Header = () => {
               New Article
             </Button>
           )}
+
+          {role === "customer" && (
+            <Button color="inherit" to="/articles" component={NavLink}>
+              Articles
+            </Button>
+          )}
+          {role === "customer" && (
+            <Button color="inherit" to="/order" component={NavLink}>
+              Order
+            </Button>
+          )}
           {isLoggedin && (
-            <Button color="inherit" to="/login" component={NavLink} onClick={(e)=>{authContext.logout();}}>
+            <Button
+              color="inherit"
+              to="/login"
+              component={NavLink}
+              onClick={(e) => {
+                authContext.logout();
+              }}
+            >
               Log out
             </Button>
           )}

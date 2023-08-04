@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import {
   Typography,
   Container,
@@ -10,6 +11,20 @@ import {
 } from "@mui/material";
 import useService from "../../services/useService";
 import AuthContext from "../../context/AuthContext";
+
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  quantity: yup
+    .number()
+    .integer()
+    .min(1, "Quantity must be at least 1")
+    .required("Quantity is required"),
+  price: yup
+    .number()
+    .positive("Price must be a positive number")
+    .required("Price is required"),
+  description: yup.string().required("Description is required"),
+});
 
 const ArticleDetails = () => {
   const [article, setArticle] = useState(null);
@@ -63,13 +78,33 @@ const ArticleDetails = () => {
     getArticleDetailsRequest,
     name,
   ]);
+  const [formErrors, setFormErrors] = useState({});
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    try {
+      await validationSchema.validate(article, { abortEarly: false });
+
+      setUpdatedData(true);
+      updateArticleRequest({
+        ...article,
+        currentName: article.name,
+      });
+      navigate("/articles");
+    } catch (errors) {
+      const errorMessages = {};
+      errors.inner.forEach((error) => {
+        errorMessages[error.path] = error.message;
+      });
+      setFormErrors(errorMessages);
+    }
+  };
 
   const handleChange = (field, value) => {
     setArticle((old) => {
       return { ...old, [field]: value };
     });
   };
-  
+
   return (
     <div>
       {" "}
@@ -101,7 +136,9 @@ const ArticleDetails = () => {
               name="name"
               placeholder="Name"
               variant="outlined"
-              value={article?.newName}
+              value={article?.newName || ""}
+              error={!!formErrors.name}
+              helperText={formErrors.name}
               onChange={(e) => {
                 setArticle((old) => {
                   return {
@@ -116,7 +153,9 @@ const ArticleDetails = () => {
               name="description"
               placeholder="Description"
               variant="outlined"
-              value={article?.description}
+              value={article?.description || ""}
+              error={!!formErrors.description}
+              helperText={formErrors.description}
               onChange={(e) => {
                 setArticle((old) => {
                   return { ...old, description: e.target.value };
@@ -129,7 +168,9 @@ const ArticleDetails = () => {
               placeholder="Price"
               variant="outlined"
               type="number"
-              value={article?.price}
+              value={article?.price || ""}
+              error={!!formErrors.price}
+              helperText={formErrors.price}
               onChange={(e) => {
                 setArticle((old) => {
                   return { ...old, price: e.target.value };
@@ -142,7 +183,9 @@ const ArticleDetails = () => {
               placeholder="Quantity"
               variant="outlined"
               type="number"
-              value={article?.quantity}
+              value={article?.quantity || ""}
+              error={!!formErrors.quantity}
+              helperText={formErrors.quantity}
               onChange={(e) => {
                 setArticle((old) => {
                   return { ...old, quantity: e.target.value };
@@ -156,13 +199,7 @@ const ArticleDetails = () => {
                 variant="contained"
                 color="primary"
                 sx={{ width: "100%", marginTop: 2 }}
-                onClick={(event) => {
-                    setUpdatedData(true);
-                    updateArticleRequest({
-                      ...article,
-                      currentName: article.name,
-                    });
-                  }}
+                onClick={handleUpdate}
               >
                 Update
               </Button>
@@ -172,9 +209,9 @@ const ArticleDetails = () => {
                 color="primary"
                 sx={{ width: "100%", marginTop: 2 }}
                 onClick={(event) => {
-                    deleteArticleRequest(article.name);
-                    setDeletedData(true);
-                  }}
+                  deleteArticleRequest(article.name);
+                  setDeletedData(true);
+                }}
               >
                 Delete
               </Button>
