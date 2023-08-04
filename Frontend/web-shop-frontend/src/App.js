@@ -10,6 +10,7 @@ import AuthContext from "./context/AuthContext";
 import NewArticle from "./pages/salesman/NewArticle";
 import SalesmanArticles from "./pages/salesman/SalesmanArticles";
 import AllSalesmen from "./pages/admin/AllSalesmen";
+import ArticleDetails from "./components/article/ArticleDetails";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -49,6 +50,10 @@ function App() {
 
       {approvedSalesman && <Route path="/new-article" element={<Layout />}>
         <Route index element={<NewArticle />} />
+      </Route>}
+
+      {approvedSalesman && <Route path="/articles/:name" element={<Layout />}>
+        <Route index element={<ArticleDetails />} />
       </Route>}
     </Routes>
   );

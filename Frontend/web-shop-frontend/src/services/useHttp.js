@@ -163,6 +163,35 @@ const useHttp = (resolve) => {
     },
     [resolve]
   );
+  const deleteRequest = useCallback(
+    (url) => {
+      prepare();
+
+      fetch(url, {
+        method: 'delete',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + getRawToken(),
+        },
+      })
+        .then((response) => {
+          return processResponse(response);
+        })
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => {
+          setError('Error doing DELETE request! ' + error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          resolve && resolve();
+        });
+    },
+    [resolve]
+  );
+
   const resetHttp = () => {
     setData(null);
     setError(null);
@@ -180,6 +209,7 @@ const useHttp = (resolve) => {
     postRequest,
     getRequest,
     putRequest,
+    deleteRequest,
     resetHttp
   };
 };

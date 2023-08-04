@@ -1,77 +1,81 @@
-import { React, useEffect, useState} from 'react'
+import { React, useEffect, useState } from "react";
 import * as yup from "yup";
-import {
-    Typography,
-    Container,
-    TextField,
-    Button,
-    Box,
-   
-  } from "@mui/material";
-  import useService from "../../services/useService";
+import { Typography, Container, TextField, Button, Box } from "@mui/material";
+import useService from "../../services/useService";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    quantity: yup.number().integer().min(1, 'Quantity must be at least 1').required('Quantity is required'),
-    price: yup.number().positive('Price must be a positive number').required('Price is required'),
-    description: yup.string().required('Description is required'),
-  });
-  
+  name: yup.string().required("Name is required"),
+  quantity: yup
+    .number()
+    .integer()
+    .min(1, "Quantity must be at least 1")
+    .required("Quantity is required"),
+  price: yup
+    .number()
+    .positive("Price must be a positive number")
+    .required("Price is required"),
+  description: yup.string().required("Description is required"),
+});
+
 const NewArticle = () => {
-    const { newArticleRequest, clearRequest, isLoading, error, statusCode } =
+  const { newArticleRequest, clearRequest, isLoading, error, statusCode } =
     useService();
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-        quantity: 1,
-        price: 1
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    quantity: 1,
+    price: 1,
+  });
+  const [formErrors, setFormErrors] = useState({});
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      console.log(formData);
+      newArticleRequest(formData);
+      navigate("/articles");
+      console.log("Article added");
+    } catch (errors) {
+      console.log(formData);
+
+      const errorMessages = {};
+      errors.inner.forEach((error) => {
+        errorMessages[error.path] = error.message;
       });
-      const [formErrors, setFormErrors] = useState({});
+      setFormErrors(errorMessages);
+    }
+  };
 
-      const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-          await validationSchema.validate(formData, { abortEarly: false });
-          console.log(formData)
-          newArticleRequest(formData);
-    
-          console.log("Article added");
-        } catch (errors) {
-          console.log(formData)
-    
-          const errorMessages = {};
-          errors.inner.forEach((error) => {
-            errorMessages[error.path] = error.message;
-          });
-          setFormErrors(errorMessages);
-        }
-      };
-    
-      const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-          ...formData,
-          [name]: value,
-        });
-        console.log(value);
-      };
-    return (
-        <div> <Container
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    console.log(value);
+  };
+  return (
+    <div>
+      {" "}
+      <Container
         sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
         }}
-    >
+      >
         <Box
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit}
-        sx={{
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -82,12 +86,12 @@ const NewArticle = () => {
             width: "100%",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
-        }}
+          }}
         >
-        <Typography color={'black'} variant="h5" gutterBottom>
+          <Typography color={"black"} variant="h5" gutterBottom>
             New Article
-        </Typography>
-        <TextField
+          </Typography>
+          <TextField
             name="name"
             label="Name"
             variant="outlined"
@@ -96,8 +100,8 @@ const NewArticle = () => {
             error={!!formErrors.name}
             helperText={formErrors.name}
             sx={{ marginBottom: 2, width: "100%" }}
-        />
-        <TextField
+          />
+          <TextField
             name="description"
             label="Description"
             variant="outlined"
@@ -106,19 +110,19 @@ const NewArticle = () => {
             error={!!formErrors.description}
             helperText={formErrors.description}
             sx={{ marginBottom: 2, width: "100%" }}
-        />
-        <TextField
+          />
+          <TextField
             name="price"
             label="Price"
             variant="outlined"
-            type ="number"
+            type="number"
             value={formData.price}
             onChange={handleChange}
             error={!!formErrors.price}
             helperText={formErrors.price}
             sx={{ marginBottom: 2, width: "100%" }}
-        />
-         <TextField
+          />
+          <TextField
             name="quantity"
             label="Quantity"
             variant="outlined"
@@ -128,21 +132,19 @@ const NewArticle = () => {
             error={!!formErrors.quantity}
             helperText={formErrors.quantity}
             sx={{ marginBottom: 2, width: "100%" }}
-        />
-        <Button
+          />
+          <Button
             type="submit"
             variant="contained"
             color="primary"
             sx={{ width: "100%", marginTop: 2 }}
-            
-        >
+          >
             Add Article
-        </Button>
-        
+          </Button>
         </Box>
-    </Container>
+      </Container>
     </div>
-  )
-}
+  );
+};
 
-export default NewArticle
+export default NewArticle;
