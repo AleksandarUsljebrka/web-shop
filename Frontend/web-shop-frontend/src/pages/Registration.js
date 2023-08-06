@@ -120,7 +120,7 @@ const Registration = () => {
             backgroundColor: "#fff",
           }}
         >
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" color={"black"} gutterBottom>
             User Registration
           </Typography>
           <Box
@@ -279,7 +279,7 @@ const Registration = () => {
           >
             Register
           </Button>
-          <Typography variant="body2" sx={{ marginTop: 2 }}>
+          <Typography color={"black"} variant="body2" sx={{ marginTop: 2 }}>
             Already have an account?{" "}
             <Link
               to="/login"

@@ -13,6 +13,9 @@ import AllSalesmen from "./pages/admin/AllSalesmen";
 import ArticleDetails from "./components/article/ArticleDetails";
 import CustomerArticles from "./pages/customer/CustomerArticles";
 import Order from "./pages/customer/Order";
+import PendingOrdersCustomer from "./pages/customer/PendingOrdersCustomer";
+import OrderDetails from "./components/orders/OrderDetails";
+import FinishedOrdersCustomer from "./pages/customer/FinishedOrdersCustomer";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -65,7 +68,19 @@ function App() {
       {role ==="customer" && <Route path="/order/" element={<Layout />}>
         <Route index element={<Order />} />
       </Route>}
-
+      {role ==="customer" && <Route path="/pending-orders/" element={<Layout />}>
+        <Route index element={<PendingOrdersCustomer />} />
+      </Route>}
+      {role ==="customer" && <Route path="/pending-orders/:id" element={<Layout />}>
+        <Route index element={<OrderDetails />} />
+      </Route>}
+      {role ==="customer" && <Route path="/finished-orders" element={<Layout />}>
+        <Route index element={<FinishedOrdersCustomer />} />
+      </Route>}
+      {role ==="customer" && <Route path="/finished-orders/:id" element={<Layout />}>
+        <Route index element={<OrderDetails />} />
+      </Route>}
+      
     </Routes>
   );
 }

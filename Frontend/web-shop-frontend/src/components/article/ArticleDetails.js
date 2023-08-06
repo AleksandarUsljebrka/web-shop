@@ -99,11 +99,6 @@ const ArticleDetails = () => {
     }
   };
 
-  const handleChange = (field, value) => {
-    setArticle((old) => {
-      return { ...old, [field]: value };
-    });
-  };
 
   return (
     <div>

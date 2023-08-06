@@ -116,7 +116,7 @@ const Login = () => {
             backgroundColor: "#fff",
           }}
         >
-          <Typography variant="h5" gutterBottom>
+          <Typography color={"black"} variant="h5" gutterBottom>
             User Sign in
           </Typography>
           <TextField
@@ -148,7 +148,7 @@ const Login = () => {
           >
             Login
           </Button>
-          <Typography variant="body2" sx={{ marginTop: 2 }}>
+          <Typography variant="body2" color={"black"} sx={{ marginTop: 2 }}>
             Don't have an account?{" "}
             <Link
               to="/registration"

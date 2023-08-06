@@ -11,10 +11,21 @@ const updateSalesmanStatusUrl =
   baseUrl + process.env.REACT_APP_UPDATE_SALESMAN_STATUS_URL;
 const getAllSalesmenUrl = baseUrl + process.env.REACT_APP_ALL_SALESMEN_URL;
 const updateArticleUrl = baseUrl + process.env.REACT_APP_UPDATE_ARTICLE_URL;
-const getArticleDetailsUrl = baseUrl + process.env.REACT_APP_GET_ARTICAL_DETAILS_URL;
+const getArticleDetailsUrl =
+  baseUrl + process.env.REACT_APP_GET_ARTICAL_DETAILS_URL;
 const deleteArticleUrl = baseUrl + process.env.REACT_APP_DELETE_ARTICLE_URL;
-const customerArticlesUrl = baseUrl + process.env.REACT_APP_CUSTOMER_ARTICLES_URL;
-const customerPostOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_POST_ORDER;
+const customerArticlesUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_ARTICLES_URL;
+const customerPostOrderUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_POST_ORDER;
+const customerPendingOrdersUrl = baseUrl + process.env.REACT_APP_CUSTOMER_PENDING_ORDERS_URL;
+const customerFinishedOrdersUrl = baseUrl + process.env.REACT_APP_CUSTOMER_FINISHED_ORDERS_URL;
+const customerDeleteOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_DELETE_ORDER_URL; 
+const customerOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_ORDER_DETAILS_URL;
+const getSalesmanOrderDetailsUrl = baseUrl + process.env.REACT_APP_SALESMAN_ORDER_DETAILS_URL;
+const getAdminOrderDetailsUrl = baseUrl + process.env.REACT_APP_ADMIN_ORDER_DETAILS_URL;
+const getSalesmanFinishedOrdersUrl = baseUrl + process.env.REACT_APP_SALESMAN_FINISHED_ORDERS_URL;
+const getSalesmanPendingOrdersUrl = baseUrl + process.env.REACT_APP_SALESMAN_PENDING_ORDERS_URL;
 const useService = () => {
   const {
     data,
@@ -26,7 +37,7 @@ const useService = () => {
     getRequest,
     resetHttp,
     putRequest,
-    deleteRequest
+    deleteRequest,
   } = useHttp();
 
   const registerRequest = useCallback(
@@ -50,7 +61,12 @@ const useService = () => {
     },
     [postRequestFormData]
   );
-
+  const getAdminOrderDetailsRequest = useCallback(
+    (id) => {
+      getRequest(getAdminOrderDetailsUrl + '?id=' + id);
+    },
+    [getRequest]
+  );
   const getSalesmanArticlesRequest = useCallback(() => {
     getRequest(getSalesmanArticlesUrl);
   }, [getRequest]);
@@ -70,7 +86,7 @@ const useService = () => {
   );
   const deleteArticleRequest = useCallback(
     (name) => {
-      deleteRequest(deleteArticleUrl + '?name=' + name);
+      deleteRequest(deleteArticleUrl + "?name=" + name);
     },
     [deleteRequest]
   );
@@ -85,16 +101,55 @@ const useService = () => {
     [putRequest]
   );
 
+  const getSalesmanFinishedOrders = useCallback(() => {
+    getRequest(getSalesmanFinishedOrdersUrl);
+  }, [getRequest]);
+
+  const getSalesmanPendingOrders = useCallback(() => {
+    getRequest(getSalesmanPendingOrdersUrl);
+  }, [getRequest]);
+
+
   const getCustomerArticlesRequest = useCallback(() => {
     getRequest(customerArticlesUrl);
   }, [getRequest]);
 
+  const getSalesmanOrderDetailsRequest = useCallback(
+    (id) => {
+      getRequest(getSalesmanOrderDetailsUrl + '?id=' + id);
+    },
+    [getRequest]
+  );
   const postCustomerOrderRequest = useCallback(
     (order) => {
       postRequest(customerPostOrderUrl, order);
     },
     [postRequest]
   );
+
+  const getCustomerFinishedOrdersRequest = useCallback(() => {
+    getRequest(customerFinishedOrdersUrl);
+  }, [getRequest]
+  );
+
+  const getCustomerPendingOrdersRequest = useCallback(() => {
+    getRequest(customerPendingOrdersUrl);
+  }, [getRequest]
+  );
+
+  const getCustomerOrderDetailsRequest = useCallback(
+    (id) => {
+      getRequest(customerOrderUrl + '?id=' + id);
+    },
+    [getRequest]
+  );
+  const deleteCustomerOrderRequest = useCallback(
+    (orderId) => {
+      deleteRequest(customerDeleteOrderUrl + '?orderId=' + orderId);
+    },
+    [deleteRequest]
+  );
+
   return {
     data,
     isLoading,
@@ -111,7 +166,14 @@ const useService = () => {
     getArticleDetailsRequest,
     deleteArticleRequest,
     getCustomerArticlesRequest,
-    postCustomerOrderRequest
+    postCustomerOrderRequest,
+    getCustomerFinishedOrdersRequest,
+    getCustomerPendingOrdersRequest,
+    deleteCustomerOrderRequest,
+    getAdminOrderDetailsRequest,
+    getSalesmanOrderDetailsRequest,
+    getCustomerOrderDetailsRequest
+
   };
 };
 
