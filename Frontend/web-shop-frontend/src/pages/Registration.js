@@ -223,13 +223,19 @@ const Registration = () => {
           >
             <TextField
               name="birthDate"
-              label="Birht Date"
+              placeholder="Birht Date"
               variant="outlined"
               type="date"
               value={formData.birthDate}
               onChange={handleChange}
               error={!!formErrors.birthDate}
-              helperText={formErrors.birthDate}
+              helperText={formErrors.birthDate && "Birth Date is required"}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                placeholder: "Birth Date", // Ovde postavite željeni tekst
+              }}
               sx={{ marginBottom: 2, width: "100%" }}
             />
             <TextField

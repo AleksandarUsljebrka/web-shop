@@ -16,6 +16,8 @@ import Order from "./pages/customer/Order";
 import PendingOrdersCustomer from "./pages/customer/PendingOrdersCustomer";
 import OrderDetails from "./components/orders/OrderDetails";
 import FinishedOrdersCustomer from "./pages/customer/FinishedOrdersCustomer";
+import PendingOrdersSalesman from "./pages/salesman/PendingOrdersSalesman";
+import FinishedOrdersSalesman from "./pages/salesman/FinishedOrdersSalesman";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -59,6 +61,20 @@ function App() {
 
       {approvedSalesman && <Route path="/articles/:name" element={<Layout />}>
         <Route index element={<ArticleDetails />} />
+      </Route>}
+
+      {approvedSalesman && <Route path="/pending-orders/" element={<Layout />}>
+        <Route index element={<PendingOrdersSalesman />} />
+      </Route>}
+      {approvedSalesman && <Route path="/pending-orders/:id" element={<Layout />}>
+        <Route index element={<OrderDetails />} />
+      </Route>}
+
+      {approvedSalesman && <Route path="/finished-orders" element={<Layout />}>
+        <Route index element={<FinishedOrdersSalesman />} />
+      </Route>}
+      {approvedSalesman && <Route path="/finished-orders/:id" element={<Layout />}>
+        <Route index element={<OrderDetails />} />
       </Route>}
 
       {role ==="customer" && <Route path="/articles" element={<Layout />}>

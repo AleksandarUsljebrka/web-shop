@@ -46,9 +46,9 @@ const PendingOrdersCustomer = () => {
     clearRequest,
   ]);
 
-  const handleCancel=(id)=>{
+  const handleCancel=(orderId)=>{
     setCancel(true);
-    deleteCustomerOrderRequest(id);
+    deleteCustomerOrderRequest(orderId);
   }
   const handleButton=(id)=>{
     navigate('/pending-orders/'+id)

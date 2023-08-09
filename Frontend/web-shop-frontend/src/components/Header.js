@@ -61,6 +61,17 @@ const Header = () => {
             </Button>
           )}
 
+          {approvedSalesman && (
+            <Button color="inherit" to="/pending-orders" component={NavLink}>
+              Pending Orders
+            </Button>
+          )}
+          {approvedSalesman && (
+            <Button color="inherit" to="/finished-orders" component={NavLink}>
+              Finished Orders
+            </Button>
+          )}
+
           {role === "customer" && (
             <Button color="inherit" to="/articles" component={NavLink}>
               Articles

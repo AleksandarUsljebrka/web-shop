@@ -145,7 +145,7 @@ const useService = () => {
   );
   const deleteCustomerOrderRequest = useCallback(
     (orderId) => {
-      deleteRequest(customerDeleteOrderUrl + '?orderId=' + orderId);
+      deleteRequest(customerDeleteOrderUrl + '?id=' + orderId);
     },
     [deleteRequest]
   );
@@ -172,7 +172,9 @@ const useService = () => {
     deleteCustomerOrderRequest,
     getAdminOrderDetailsRequest,
     getSalesmanOrderDetailsRequest,
-    getCustomerOrderDetailsRequest
+    getCustomerOrderDetailsRequest,
+    getSalesmanPendingOrders,
+    getSalesmanFinishedOrders
 
   };
 };
