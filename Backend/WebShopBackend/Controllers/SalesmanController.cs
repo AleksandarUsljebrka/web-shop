@@ -64,7 +64,7 @@ namespace WebShopBackend.Controllers
 
         [HttpPost("article")]
         [Authorize(Roles = "Salesman")]
-        public IActionResult AddArticle([FromQuery] AddArticleDto addArticleDto)
+        public IActionResult AddArticle([FromForm] AddArticleDto addArticleDto)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace WebShopBackend.Controllers
 
         [HttpPut("article")]
         [Authorize(Roles = "Salesman")]
-        public IActionResult UpdateArticle([FromQuery] UpdateArticleDto updateArticleDto)
+        public IActionResult UpdateArticle([FromBody] UpdateArticleDto updateArticleDto)
         {
             try
             {

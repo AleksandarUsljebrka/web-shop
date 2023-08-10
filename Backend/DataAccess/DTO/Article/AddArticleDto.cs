@@ -1,4 +1,6 @@
-﻿namespace DataAccess.DTO.Article
+﻿using Microsoft.AspNetCore.Http;
+
+namespace DataAccess.DTO.Article
 {
     public class AddArticleDto : IDto
 	{
@@ -11,6 +13,6 @@
 
 		public double Price { get; set; }
 
-		public string ProductImage { get; set; }
+		public IFormFile ProductImage { get; set; }
 	}
 }

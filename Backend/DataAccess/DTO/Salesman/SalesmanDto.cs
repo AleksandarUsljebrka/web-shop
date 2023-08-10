@@ -17,7 +17,7 @@ namespace DataAccess.DTO.Salesman
 
 		public string Address { get; set; }
 
-		public byte[] SellerProfileImage { get; set; }
+		public byte[] SalesmanProfileImage { get; set; }
 
 		public DateTime Birthdate { get; set; }
 

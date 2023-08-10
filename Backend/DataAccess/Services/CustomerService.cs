@@ -14,6 +14,7 @@ using System.Linq;
 
 namespace DataAccess.Services
 {
+    //DONE
     public class CustomerService:ICustomerService
     {
         private double deliveryPrice = 300;
@@ -22,6 +23,7 @@ namespace DataAccess.Services
         private readonly IUserHelper _userHelper;
         private readonly ITokenHelper _tokenHelper;
         private readonly IOrderHelper _orderHelper = new OrderHelper();
+        private readonly IImageHelper _imageHelper = new ImageHelper();
         public CustomerService(IUnitOfWork unitOfWork, IMapper mapper,  ITokenHelper tokenHelper)
         {
             _userHelper = new UserHelper(unitOfWork);
@@ -33,9 +35,15 @@ namespace DataAccess.Services
         {
             IResult result;
             List<IArticle> articlesDB = _unitOfWork.ArticleRepository.GetAll().ToList<IArticle>();
-            
-            ArticleListDto articleListDto = new ArticleListDto();
-            articleListDto.Articles = _mapper.Map<List<ArticleDto>>(articlesDB);
+            List<ArticleDto> articlesDto = new List<ArticleDto>();
+
+            foreach (IArticle article in articlesDB)
+            {
+                byte[] productImage = _imageHelper.GetArticleProductImage(article);
+                articlesDto.Add(new ArticleDto(article.Id, article.Name, article.Description, article.Quantity, article.Price, productImage));
+            }
+
+            ArticleListDto articleListDto = new ArticleListDto() { Articles = articlesDto };
 
             result = new Result(true, articleListDto);
             return result;
@@ -73,7 +81,7 @@ namespace DataAccess.Services
             return result;
 
         }
-
+        //PROVERI da li ce raditi ovako ili je potrebna FindAllIncludes...
         public IResult OrderDetails(long id)
         {
             IResult result;
@@ -84,14 +92,21 @@ namespace DataAccess.Services
 
             OrderDto orderDto = _mapper.Map<OrderDto>(order);
 
-            List<IItem> allItems = _unitOfWork.ItemRepository.GetAll().ToList<IItem>();
-            List<IItem> itemsOfOrder = new List<IItem>();
+            List<IItem> itemsOfOrder = _unitOfWork.ItemRepository.FindAllIncludeArticles(i => i.OrderId == id).ToList<IItem>();
+         
 
-            foreach (var item in allItems)
-                if (item.OrderId == id)
-                    itemsOfOrder.Add(item);
+            //foreach (var item in allItems)
+            //    if (item.OrderId == id)
+            //        itemsOfOrder.Add(item);
 
             orderDto.Items = _mapper.Map<List<ItemDto>>(itemsOfOrder);
+
+            foreach (var orderItem in orderDto.Items)
+            {
+                IArticle article = itemsOfOrder.Find(item => item.ArticleId == orderItem.ArticleId).Article;
+                byte[] image = _imageHelper.GetArticleProductImage(article);
+                orderItem.ArticleImage = image;
+            }
 
             orderDto.RemainingTime = _orderHelper.GetRemainingTime(orderDto.PlacedTime, order.DeliveryDurationInSeconds);
 

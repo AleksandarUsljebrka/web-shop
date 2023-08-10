@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace DataAccess.Services
 {
+    //DONE
     public class SalesmanService:ISalesmanService
     {
         private readonly IUserHelper _userHelper;
@@ -21,6 +22,7 @@ namespace DataAccess.Services
         private readonly IMapper _mapper;
         private readonly ISalesmanHelper _salesmanHelper = new SalesmanHelper();
         private readonly IOrderHelper _orderHelper = new OrderHelper();
+        private readonly IImageHelper _imageHelper = new ImageHelper();
         public SalesmanService(IUnitOfWork unitOfWork, ITokenHelper tokenHelper, IMapper mapper)
         {
             _userHelper = new UserHelper(unitOfWork);
@@ -28,7 +30,7 @@ namespace DataAccess.Services
             _tokenHelper = tokenHelper;
             _unitOfWork = unitOfWork;
         }
-
+       
         public IResult AddArticle(AddArticleDto addArticleDto, string token)
         {
             IResult result;
@@ -51,8 +53,16 @@ namespace DataAccess.Services
                 return result;
             }
 
+            if(_unitOfWork.ArticleRepository.FindFirst(a => a.SalesmanId == salesman.Id && a.Name == addArticleDto.Name)!= null)
+            {
+                result = new Result(false, ErrorCode.NotFound, "Salesman already has an article with this name!");
+                return result;
+            }
+
             Article article = _mapper.Map<Article>(addArticleDto);
             article.SalesmanId = salesman.Id;
+
+            _imageHelper.AddProductImageIfExists(article, addArticleDto.ProductImage, salesman.Id);
 
             _unitOfWork.ArticleRepository.Add((Article)article);
             _unitOfWork.SaveChanges();
@@ -61,7 +71,7 @@ namespace DataAccess.Services
             return result;
             
         }
-
+       
         public IResult UpdateArticle(UpdateArticleDto updateArticleDto, string token)
         {
             IResult result;
@@ -99,6 +109,7 @@ namespace DataAccess.Services
             return result;
 
         }
+      
         public IResult GetAllArticles(string token)
         {
             IResult result;
@@ -124,12 +135,19 @@ namespace DataAccess.Services
                 return result; ;
             }
 
-            ArticleListDto articlesDto = new ArticleListDto() 
+            List<ArticleDto> articlesDto = new List<ArticleDto>();
+
+            foreach (IArticle article in articles)
             {
-                Articles = _mapper.Map<List<ArticleDto>>(articles) 
+                byte[] productImage = _imageHelper.GetArticleProductImage(article);
+                articlesDto.Add(new ArticleDto(article.Id, article.Name, article.Description, article.Quantity, article.Price, productImage));
+            }
+            ArticleListDto articleListDto = new ArticleListDto()
+            {
+                Articles = articlesDto
             };
 
-            result = new Result(true, articlesDto);
+            result = new Result(true, articleListDto);
             return result;
         }
 
@@ -169,7 +187,7 @@ namespace DataAccess.Services
             result = new Result(true, ordersDto);
             return result;
         }
-        
+     
         public IResult GetOrderDetails(string token, long orderId)
         {
             IResult result;
@@ -195,6 +213,13 @@ namespace DataAccess.Services
             orderDto.Items = _mapper.Map<List<ItemDto>>(items);
 
             orderDto.RemainingTime = _orderHelper.GetRemainingTime(orderDto.PlacedTime, order.DeliveryDurationInSeconds);
+
+            foreach (var orderItem in orderDto.Items)
+            {
+                IArticle article = items.Find(item => item.ArticleId == orderItem.ArticleId).Article;
+                byte[] image = _imageHelper.GetArticleProductImage(article);
+                orderItem.ArticleImage = image;
+            }
 
             result = new Result(true, orderDto);
             return result;
@@ -235,7 +260,7 @@ namespace DataAccess.Services
             return result;
 
         }
-
+       
         public IResult GetArticleDetails(string token, string name)
         {
             IResult result;
@@ -259,12 +284,12 @@ namespace DataAccess.Services
                 return result;
             }
 
-            ArticleDto articleDto = _mapper.Map<ArticleDto>(article);
-
+            var img = _imageHelper.GetArticleProductImage(article);
+            ArticleDto articleDto = new ArticleDto(article.Id, article.Name, article.Description, article.Quantity, article.Price, img);
             result = new Result(true, articleDto);
             return result;
         }
-
+      
         public IResult DeleteArticle(string token, string name)
         {
             IResult result;
@@ -290,6 +315,8 @@ namespace DataAccess.Services
 
             _unitOfWork.ArticleRepository.Delete((Article)article);
             _unitOfWork.SaveChanges();
+
+            _imageHelper.DeleteArticleProductImageIfExists(article);
 
             result = new Result(true);
             return result;

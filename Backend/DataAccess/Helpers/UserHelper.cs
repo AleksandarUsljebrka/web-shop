@@ -2,13 +2,17 @@
 using Data.Models.Interfaces;
 using Data.Repository.UnitOfWork;
 using DataAccess.Helpers.Interfaces;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace DataAccess.Helpers
 {
     public class UserHelper: IUserHelper
     {
         private readonly IUnitOfWork _unitOfWork;
-        
+        private const string relativePath = "../ProfileImages";
+
+        public string RelativePath => relativePath;
         public UserHelper(IUnitOfWork unitOfWork)
         {
             this._unitOfWork = unitOfWork;
@@ -71,5 +75,7 @@ namespace DataAccess.Helpers
             
             return user;
         }
+
+       
     }
 }

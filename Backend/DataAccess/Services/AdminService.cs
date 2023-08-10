@@ -13,16 +13,19 @@ using System.Linq;
 
 namespace DataAccess.Services
 {
+    //DONE
     public class AdminService:IAdminService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IOrderHelper _orderHelper = new OrderHelper();
-
+        private readonly IUserHelper _userHelper;
+        private readonly IImageHelper _imageHelper = new ImageHelper();
         public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userHelper = new UserHelper(_unitOfWork);
         }
         public IResult GetAllSalesmen()
         {
@@ -31,6 +34,11 @@ namespace DataAccess.Services
             List<SalesmanDto> salesmenDto = _mapper.Map<List<SalesmanDto>>(salesmen);
             SalesmanListDto salesmenListDto = new SalesmanListDto() { Salesmen = salesmenDto };
            
+            foreach(var salesmanDto in salesmenListDto.Salesmen)
+            {
+                string path = salesmen.Find(s => s.Username == salesmanDto.Username).ProfileImage;
+                salesmanDto.SalesmanProfileImage = _imageHelper.GetProfileImage(path);
+            }
             result = new Result(true, salesmenListDto);
             return result;
 
@@ -74,6 +82,13 @@ namespace DataAccess.Services
             //        allItems.Remove(item);
             //}
             orderDto.Items = _mapper.Map<List<ItemDto>>(allItems);
+
+            foreach (var orderItem in orderDto.Items)
+            {
+                IArticle article = allItems.Find(item => item.ArticleId == orderItem.ArticleId).Article;
+                byte[] image = _imageHelper.GetArticleProductImage(article);
+                orderItem.ArticleImage = image;
+            }
 
             orderDto.RemainingTime = _orderHelper.GetRemainingTime(orderDto.PlacedTime, order.DeliveryDurationInSeconds);
 

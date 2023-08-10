@@ -20,7 +20,7 @@ namespace WebShopBackend.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("all-ordes")]
+        [HttpGet("articles")]
         [Authorize(Roles ="Customer")]
         public IActionResult GetArticles()
         {

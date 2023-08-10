@@ -17,6 +17,7 @@ namespace DataAccess.Services
         private readonly IMapper _mapper;
         private readonly ITokenHelper _tokenHelper;
         private readonly IAuthHelper _authHelper = new AuthHelper();
+        private readonly IImageHelper _imageHelper = new ImageHelper();
         public UserService(IUnitOfWork unitOfWork, ITokenHelper tokenHelper, IMapper mapper)
         {
             _tokenHelper = tokenHelper;
@@ -62,6 +63,8 @@ namespace DataAccess.Services
                 result = new Result(false, ErrorCode.Conflict, $"Username {newUser.Username} already exists!");
                 return result;
             }
+
+            _imageHelper.UpdateProfileImagePath(currentUser, newUser.Username);
 
             currentUser.Username = newUser.Username;
             currentUser.Firstname = newUser.Firstname;
@@ -126,6 +129,70 @@ namespace DataAccess.Services
             result = new Result(true);
             return result;
 
+        }
+
+        public IResult GetProfileImage(string token)
+        {
+            IResult result;
+
+            IUser user = _userHelper.UserByToken(token, _tokenHelper);
+            if (user == null)
+            {
+                result = new Result(false, ErrorCode.NotFound, "User doesn't exists!");
+                return result;
+            }
+            if (user.ProfileImage == null)
+            {
+                result = new Result(true);
+                return result;
+            }
+            byte[] image = _imageHelper.GetProfileImage(user.ProfileImage);
+            if (image == null)
+            {
+                result = new Result(true);
+                return result;
+            }
+
+            ImgByteDto imgDto = new ImgByteDto() { ProfileImage = image };
+            result = new Result(true, imgDto);
+
+            return result;
+        }
+
+        public IResult UpdateProfilImage(FormFileDto profilImageDto, string token)
+        {
+            IResult result;
+
+            IUser user = _userHelper.UserByToken(token, _tokenHelper);
+            if (user == null)
+            {
+                result = new Result(false, ErrorCode.NotFound, "User doesn't exists!");
+                return result;
+            }
+
+            if (!_imageHelper.UploadProfileImage(user, profilImageDto.ProfileImage))
+            {
+
+                result = new Result(false, ErrorCode.BadRequest);
+                return result;
+            }
+            if (user is Admin)
+                _unitOfWork.AdminRepository.Update((Admin)user);
+            else if (user is Salesman)
+                _unitOfWork.SalesmanRepository.Update((Salesman)user);
+            else if (user is Customer)
+                _unitOfWork.CustomerRepository.Update((Customer)user);
+            else
+            {
+                result = new Result(false, ErrorCode.NotFound);
+                return result;
+            }
+
+            _unitOfWork.SaveChanges();
+
+            result = new Result(true);
+
+            return result;
         }
     }
 }

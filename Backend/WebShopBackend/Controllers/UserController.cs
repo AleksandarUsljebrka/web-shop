@@ -76,5 +76,55 @@ namespace WebShopBackend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("profile-image")]
+        [Authorize]
+        public IActionResult GetProfileImage()
+        {
+            try
+            {
+                string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+               
+
+                IResult result = _userService.GetProfileImage(token);
+
+                if (!result.Successfull)
+                {
+                    return StatusCode((int)result.ErrorCode, result.ErrorMess);
+                }
+
+                return Ok(result.Dto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut("profile-image")]
+        [Authorize]
+        public IActionResult UpdateProfileImage([FromForm] FormFileDto profilImage)
+        {
+            try
+            {
+
+                string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+
+
+                IResult result = _userService.UpdateProfilImage(profilImage,token);
+
+                if (!result.Successfull)
+                {
+                    return StatusCode((int)result.ErrorCode, result.ErrorMess);
+                }
+
+                return Ok(result.Dto);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            }
+        }
     }
 }

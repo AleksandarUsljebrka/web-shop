@@ -51,6 +51,7 @@ const Registration = () => {
     password: "",
     confirmPassword: "",
     role: "",
+    profileImage: null
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -59,12 +60,22 @@ const Registration = () => {
     event.preventDefault();
     try {
       await registrationSchema.validate(formData, { abortEarly: false });
-      console.log(formData)
-      registerRequest(formData);
+      console.log(formData);
+
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        if (key === "profileImage") {
+          formDataToSend.append(key, formData[key]);
+        } else {
+          formDataToSend.append(key, JSON.stringify(formData[key]));
+        }
+      }
+
+      registerRequest(formDataToSend);
 
       console.log("Registration successful");
     } catch (errors) {
-      console.log(formData)
+      console.log(formData);
 
       const errorMessages = {};
       errors.inner.forEach((error) => {
@@ -82,17 +93,26 @@ const Registration = () => {
     });
     console.log(value);
   };
+
   useEffect(() => {
     if (isLoading) {
       return;
     } else if (statusCode === 200 && !error) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [isLoading, statusCode, error, navigate]);
 
+  const handleImageChange = (event) => {
+    const imageFile = event.target.files[0];
+    setFormData({
+      ...formData,
+      profileImage: imageFile.name,
+    });
+  };
+  
+
   return (
     <div>
-      
       <Container
         sx={{
           display: "flex",
@@ -262,8 +282,8 @@ const Registration = () => {
               variant="outlined"
               sx={{ marginBottom: 2, width: "100%" }}
             >
-              <InputLabel >Role</InputLabel>
-              <Select 
+              <InputLabel>Role</InputLabel>
+              <Select
                 name="role"
                 label="Role"
                 value={formData.role}
@@ -275,6 +295,13 @@ const Registration = () => {
                 <MenuItem value="Customer">Customer</MenuItem>
               </Select>
             </FormControl>
+            <TextField
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={handleImageChange}
+              sx={{ marginBottom: 2, width: "100%" }}
+            />
           </Box>
 
           <Button

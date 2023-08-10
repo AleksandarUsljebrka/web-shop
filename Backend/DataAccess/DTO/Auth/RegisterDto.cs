@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.DTO.Auth
@@ -26,8 +27,8 @@ namespace DataAccess.DTO.Auth
 		[Required(ErrorMessage = "Please enter role!")]
 		public string Role { get; set; }
 
-		//[Required(ErrorMessage = "Please enter profile image!")]
-		//public IFormFile ProfileImage { get; set; }
+		[Required(ErrorMessage = "Please enter profile image!")]
+		public IFormFile ProfileImage { get; set; }
 
 		[Required(ErrorMessage = "Please enter birthdate!")]
 		public DateTime Birthdate { get; set; }

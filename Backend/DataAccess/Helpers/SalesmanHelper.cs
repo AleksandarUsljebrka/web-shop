@@ -8,6 +8,7 @@ namespace DataAccess.Helpers
 {
     public class SalesmanHelper : ISalesmanHelper
     {
+		private readonly IImageHelper _imageHelper = new ImageHelper();
         public List<IArticle> GetArticlesOfSalesman(List<IArticle> articles, long salesmanId)
         {
             List<IArticle> result = new List<IArticle>();
@@ -38,7 +39,7 @@ namespace DataAccess.Helpers
 			if (!string.IsNullOrWhiteSpace(updateArticleDto.NewName))
 			{
 				article.Name = updateArticleDto.NewName;
-				
+				_imageHelper.UpdateProductImagePath(article);	
 			}
 
 			if (!string.IsNullOrWhiteSpace(updateArticleDto.Description))

@@ -17,7 +17,7 @@ namespace DataAccess.Services
         private readonly IAuthHelper _authHelper = new AuthHelper();
         private readonly IMapper _mapper;
         private readonly ITokenHelper _tokenHelper;
-
+        private readonly IImageHelper _imageHelper = new ImageHelper();
         public AuthService(IUnitOfWork unitOfWork, IMapper mapper, ITokenHelper tokenHelper)
         {
             _tokenHelper = tokenHelper;
@@ -44,12 +44,14 @@ namespace DataAccess.Services
             {
                 Customer customer = _mapper.Map<Customer>(regDto);
                 customer.Password = _authHelper.HashPassword(regDto.Password);
+                _imageHelper.UploadProfileImage(customer, regDto.ProfileImage);
                 _unitOfWork.CustomerRepository.Add(customer);
             }
             else if(regDto.Role.Contains("Admin"))
             {
                 Admin admin = _mapper.Map<Admin>(regDto);
                 admin.Password = _authHelper.HashPassword(regDto.Password);
+                _imageHelper.UploadProfileImage(admin, regDto.ProfileImage);
                 _unitOfWork.AdminRepository.Add(admin);
             }
             else if(regDto.Role.Contains("Salesman"))
@@ -57,6 +59,7 @@ namespace DataAccess.Services
                 Salesman salesman = _mapper.Map<Salesman>(regDto);
                 salesman.ApprovalStatus = SalesmanStatus.Pending;
                 salesman.Password = _authHelper.HashPassword(regDto.Password);
+                _imageHelper.UploadProfileImage(salesman, regDto.ProfileImage);
                 _unitOfWork.SalesmanRepository.Add(salesman);
             }
             else
