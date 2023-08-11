@@ -18,6 +18,7 @@ import OrderDetails from "./components/orders/OrderDetails";
 import FinishedOrdersCustomer from "./pages/customer/FinishedOrdersCustomer";
 import PendingOrdersSalesman from "./pages/salesman/PendingOrdersSalesman";
 import FinishedOrdersSalesman from "./pages/salesman/FinishedOrdersSalesman";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -45,6 +46,10 @@ function App() {
       <Route path="/login" element={<Layout />}>
         {!isLoggedin && <Route index element={<Login />} />}
         {isLoggedin && <Route index element={<Home />} />}
+      </Route>
+
+      <Route path="/my-profile" element={<Layout />}>
+        {isLoggedin && <Route index element={<MyProfile />} />}
       </Route>
 
       {role === 'admin' && <Route path="/all-salesmen" element={<Layout />}>

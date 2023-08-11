@@ -42,6 +42,11 @@ const Header = () => {
               Register
             </Button>
           )}
+          {isLoggedin && (
+            <Button color="inherit" to="/my-profile" component={NavLink}>
+              My Profile
+            </Button>
+          )}
 
           {role === "admin" && (
             <Button color="inherit" to="/all-salesmen" component={NavLink}>

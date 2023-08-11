@@ -12,10 +12,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Paper
 } from "@mui/material";
 import * as yup from "yup";
 import useService from "../services/useService";
 import Header from "../components/Header";
+import ImageUploader from "../components/ImageUploader";
 
 const registrationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -26,7 +28,7 @@ const registrationSchema = yup.object().shape({
   birthDate: yup.date().required("Birth date is required"),
   password: yup
     .string()
-    .min(4, "Password must be at least 6 characters")
+    .min(4, "Password must be at least 4 characters")
     .required("Password is required"),
   confirmPassword: yup
     .string()
@@ -51,7 +53,7 @@ const Registration = () => {
     password: "",
     confirmPassword: "",
     role: "",
-    profileImage: null
+    profileImage: null,
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -62,16 +64,16 @@ const Registration = () => {
       await registrationSchema.validate(formData, { abortEarly: false });
       console.log(formData);
 
-      const formDataToSend = new FormData();
+     /* const formDataToSend = new FormData();
       for (const key in formData) {
         if (key === "profileImage") {
           formDataToSend.append(key, formData[key]);
         } else {
           formDataToSend.append(key, JSON.stringify(formData[key]));
         }
-      }
+      }*/
 
-      registerRequest(formDataToSend);
+      registerRequest(formData);
 
       console.log("Registration successful");
     } catch (errors) {
@@ -102,14 +104,14 @@ const Registration = () => {
     }
   }, [isLoading, statusCode, error, navigate]);
 
-  const handleImageChange = (event) => {
+  /* const handleImageChange = (event) => {
     const imageFile = event.target.files[0];
     setFormData({
       ...formData,
       profileImage: imageFile.name,
     });
   };
-  
+  */
 
   return (
     <div>
@@ -254,7 +256,7 @@ const Registration = () => {
                 shrink: true,
               }}
               inputProps={{
-                placeholder: "Birth Date", // Ovde postavite željeni tekst
+                placeholder: "Birth Date", 
               }}
               sx={{ marginBottom: 2, width: "100%" }}
             />
@@ -295,12 +297,11 @@ const Registration = () => {
                 <MenuItem value="Customer">Customer</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              type="file"
-              name="profileImage"
-              accept="image/*"
-              onChange={handleImageChange}
-              sx={{ marginBottom: 2, width: "100%" }}
+            <ImageUploader
+              label="Upload Profile Image"
+              onImageChange={(imageFile) =>
+                setFormData({ ...formData, profileImage: imageFile })
+              }
             />
           </Box>
 

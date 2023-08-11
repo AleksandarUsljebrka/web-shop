@@ -14,7 +14,7 @@ const useHttp = (resolve) => {
   };
   const processResponse = (response) => {
     setStatusCode(response.status);
-    // Action if its JSON response
+   
     if (response.headers.get("content-type")?.includes("application/json")) {
       if (!response.ok) {
         return response.json().then((data) => {
@@ -25,7 +25,7 @@ const useHttp = (resolve) => {
       }
       return response.json();
     }
-    // Action if its TEXT response
+    
     else if (response.headers.get("content-type")?.includes("text/plain")) {
       if (!response.ok) {
         return response.text().then((errorMessage) => {
@@ -33,7 +33,7 @@ const useHttp = (resolve) => {
         });
       }
     }
-    // Action for neither
+  
     else {
       if (!response.ok) {
         const errorMessage = response?.title || "";
@@ -66,6 +66,40 @@ const useHttp = (resolve) => {
         })
         .catch((error) => {
           setError("Error doing POST request! " + error.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          resolve && resolve();
+        });
+    },
+    [resolve]
+  );
+
+  const putRequestFormData = useCallback(
+    (url, data) => {
+      prepare();
+
+      const formData = new FormData();
+      for (const key in data) {
+        formData.append(key, data[key]);
+      }
+
+      fetch(url, {
+        method: 'put',
+        body: formData,
+        mode: 'cors',
+        headers: {
+          Authorization: 'Bearer ' + getRawToken(),
+        },
+      })
+        .then((response) => {
+          return processResponse(response);
+        })
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => {
+          setError('Error doing PUT request! ' + error.message);
         })
         .finally(() => {
           setIsLoading(false);
@@ -206,6 +240,7 @@ const useHttp = (resolve) => {
     error,
     statusCode,
     postRequestFormData,
+    putRequestFormData,
     postRequest,
     getRequest,
     putRequest,

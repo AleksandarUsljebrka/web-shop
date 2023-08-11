@@ -18,14 +18,29 @@ const customerArticlesUrl =
   baseUrl + process.env.REACT_APP_CUSTOMER_ARTICLES_URL;
 const customerPostOrderUrl =
   baseUrl + process.env.REACT_APP_CUSTOMER_POST_ORDER;
-const customerPendingOrdersUrl = baseUrl + process.env.REACT_APP_CUSTOMER_PENDING_ORDERS_URL;
-const customerFinishedOrdersUrl = baseUrl + process.env.REACT_APP_CUSTOMER_FINISHED_ORDERS_URL;
-const customerDeleteOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_DELETE_ORDER_URL; 
-const customerOrderUrl = baseUrl + process.env.REACT_APP_CUSTOMER_ORDER_DETAILS_URL;
-const getSalesmanOrderDetailsUrl = baseUrl + process.env.REACT_APP_SALESMAN_ORDER_DETAILS_URL;
-const getAdminOrderDetailsUrl = baseUrl + process.env.REACT_APP_ADMIN_ORDER_DETAILS_URL;
-const getSalesmanFinishedOrdersUrl = baseUrl + process.env.REACT_APP_SALESMAN_FINISHED_ORDERS_URL;
-const getSalesmanPendingOrdersUrl = baseUrl + process.env.REACT_APP_SALESMAN_PENDING_ORDERS_URL;
+const customerPendingOrdersUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_PENDING_ORDERS_URL;
+const customerFinishedOrdersUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_FINISHED_ORDERS_URL;
+const customerDeleteOrderUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_DELETE_ORDER_URL;
+const customerOrderUrl =
+  baseUrl + process.env.REACT_APP_CUSTOMER_ORDER_DETAILS_URL;
+const getSalesmanOrderDetailsUrl =
+  baseUrl + process.env.REACT_APP_SALESMAN_ORDER_DETAILS_URL;
+const getAdminOrderDetailsUrl =
+  baseUrl + process.env.REACT_APP_ADMIN_ORDER_DETAILS_URL;
+const getSalesmanFinishedOrdersUrl =
+  baseUrl + process.env.REACT_APP_SALESMAN_FINISHED_ORDERS_URL;
+const getSalesmanPendingOrdersUrl =
+  baseUrl + process.env.REACT_APP_SALESMAN_PENDING_ORDERS_URL;
+const getUserUrl = baseUrl + process.env.REACT_APP_GET_USER_URL;
+const updateUserUrl = baseUrl + process.env.REACT_APP_UPDATE_USER_URL;
+const changePasswordUrl = baseUrl + process.env.REACT_APP_CHANGE_PASSWORD_URL;
+const getProfileImageUrl =
+  baseUrl + process.env.REACT_APP_GET_PROFILE_IMAGE_URL;
+const changeProfileImageUrl =
+  baseUrl + process.env.REACT_APP_CHANGE_PROFILE_IMAGE_URL;
 const useService = () => {
   const {
     data,
@@ -33,6 +48,7 @@ const useService = () => {
     error,
     statusCode,
     postRequestFormData,
+    putRequestFormData,
     postRequest,
     getRequest,
     resetHttp,
@@ -63,7 +79,7 @@ const useService = () => {
   );
   const getAdminOrderDetailsRequest = useCallback(
     (id) => {
-      getRequest(getAdminOrderDetailsUrl + '?id=' + id);
+      getRequest(getAdminOrderDetailsUrl + "?id=" + id);
     },
     [getRequest]
   );
@@ -109,14 +125,13 @@ const useService = () => {
     getRequest(getSalesmanPendingOrdersUrl);
   }, [getRequest]);
 
-
   const getCustomerArticlesRequest = useCallback(() => {
     getRequest(customerArticlesUrl);
   }, [getRequest]);
 
   const getSalesmanOrderDetailsRequest = useCallback(
     (id) => {
-      getRequest(getSalesmanOrderDetailsUrl + '?id=' + id);
+      getRequest(getSalesmanOrderDetailsUrl + "?id=" + id);
     },
     [getRequest]
   );
@@ -129,25 +144,52 @@ const useService = () => {
 
   const getCustomerFinishedOrdersRequest = useCallback(() => {
     getRequest(customerFinishedOrdersUrl);
-  }, [getRequest]
-  );
+  }, [getRequest]);
 
   const getCustomerPendingOrdersRequest = useCallback(() => {
     getRequest(customerPendingOrdersUrl);
-  }, [getRequest]
-  );
+  }, [getRequest]);
 
   const getCustomerOrderDetailsRequest = useCallback(
     (id) => {
-      getRequest(customerOrderUrl + '?id=' + id);
+      getRequest(customerOrderUrl + "?id=" + id);
     },
     [getRequest]
   );
   const deleteCustomerOrderRequest = useCallback(
     (orderId) => {
-      deleteRequest(customerDeleteOrderUrl + '?id=' + orderId);
+      deleteRequest(customerDeleteOrderUrl + "?id=" + orderId);
     },
     [deleteRequest]
+  );
+
+  const getUserProfileRequest = useCallback(() => {
+    getRequest(getUserUrl);
+  }, [getRequest]);
+
+  const updateUserRequest = useCallback(
+    (user) => {
+      putRequest(updateUserUrl, user);
+    },
+    [putRequest]
+  );
+
+  const changePasswordRequest = useCallback(
+    (data) => {
+      putRequest(changePasswordUrl, data);
+    },
+    [putRequest]
+  );
+
+  const getProfileImageRequest = useCallback(() => {
+    getRequest(getProfileImageUrl);
+  }, [getRequest]);
+
+  const updateProfileImageRequest = useCallback(
+    (data) => {
+      putRequestFormData(changeProfileImageUrl, data);
+    },
+    [putRequestFormData]
   );
 
   return {
@@ -174,8 +216,12 @@ const useService = () => {
     getSalesmanOrderDetailsRequest,
     getCustomerOrderDetailsRequest,
     getSalesmanPendingOrders,
-    getSalesmanFinishedOrders
-
+    getSalesmanFinishedOrders,
+    getUserProfileRequest,
+    updateUserRequest,
+    changePasswordRequest,
+    getProfileImageRequest,
+    updateProfileImageRequest,
   };
 };
 
