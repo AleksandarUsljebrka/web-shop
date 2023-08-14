@@ -18,8 +18,10 @@ namespace DataAccess.DTO.Auth
 		[Required(ErrorMessage = "Please enter email!")]
 		public string Email { get; set; }
 
-		[Required(ErrorMessage = "Please enter password!")]
+		[Required(ErrorMessage = "Please enter the password!")]
 		public string Password { get; set; }
+		[Required(ErrorMessage = "Please confirm the password!")]
+
 		public string ConfirmPassword { get; set; }
 		[Required(ErrorMessage = "Please enter Address!")]
 		public string Address { get; set; }
@@ -27,7 +29,7 @@ namespace DataAccess.DTO.Auth
 		[Required(ErrorMessage = "Please enter role!")]
 		public string Role { get; set; }
 
-		[Required(ErrorMessage = "Please enter profile image!")]
+		
 		public IFormFile ProfileImage { get; set; }
 
 		[Required(ErrorMessage = "Please enter birthdate!")]

@@ -118,7 +118,7 @@ namespace WebShopBackend.Controllers
                     return StatusCode((int)result.ErrorCode, result.ErrorMess);
                 }
 
-                return Ok(result.Dto);
+                return Ok();
             }
             catch(Exception e)
             {
