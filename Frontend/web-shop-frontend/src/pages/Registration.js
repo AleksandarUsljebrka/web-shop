@@ -302,6 +302,7 @@ const Registration = () => {
               onImageChange={(imageFile) =>
                 setFormData({ ...formData, profileImage: imageFile })
               }
+              hasSet={false}
             />
           </Box>
 

@@ -1,19 +1,14 @@
 import { React, useState, useEffect, useContext } from "react";
 import { Link, NavLink, useFetcher, useNavigate } from "react-router-dom";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Container,
   TextField,
   Button,
   Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Paper,
 } from "@mui/material";
+
 import * as yup from "yup";
 import useService from "../services/useService";
 import ImageUploader from "../components/ImageUploader";
@@ -108,6 +103,8 @@ const MyProfile = () => {
       console.log("Updated profile");
     } else if (statusCode === 200 && !error && updateImg) {
       setUpdateImg(false);
+      getProfileImageRequest();
+
       clearRequest();
       console.log("Updated image");
     } else if (statusCode === 200 && !error && updatePassword) {
@@ -118,14 +115,27 @@ const MyProfile = () => {
       setUpdateImg(false);
       setFetchImg(true);
       getProfileImageRequest();
-      console.log("StatusCode:" + statusCode + " Error:" + error);
+      console.log("SSStatusCode:" + statusCode + " Error:" + error);
 
       clearRequest();
     } else if (statusCode !== 200 && error) {
-      console.log("StatusCode:" + statusCode + " Error:" + error);
+      console.log("AStatusCode:" + statusCode + " Error:" + error);
       clearRequest();
     }
-  });
+  }, [
+    isLoading,
+    statusCode,
+    error,
+    data,
+    fetchData,
+    clearRequest,
+    getUserProfileRequest,
+    updateData,
+    getProfileImageRequest,
+    updatePassword,
+    fetchImg,
+    updateImg,
+  ]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -191,7 +201,6 @@ const MyProfile = () => {
         }}
       >
         <Box
-          
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit}
@@ -231,8 +240,30 @@ const MyProfile = () => {
                   profileImage: imageFile,
                 });
               }}
+              setImage={setProfileImage}
+              hasSet={true}
             />
-
+            <Box
+              sx={{ justifyContent: "center", gap: "0px" }}
+            >
+              
+              {role.toLowerCase() === "salesman" &&
+                status?.toLowerCase() !== "approved" && (
+                  <Typography
+                    variant="h5"
+                    color="secondary"
+                    paddingBottom="15px"
+                  >
+                    Account Denied
+                  </Typography>
+                )}
+              {role.toLowerCase() === "salesman" &&
+                status?.toLowerCase() === "approved" && (
+                  <Typography variant="h5" color="primary" paddingBottom="15px">
+                    Account Approved
+                  </Typography>
+                )}
+            </Box>
             <Paper
               component="form"
               sx={{ marginTop: "10px", width: "30%", alignItems: "center" }}
@@ -368,8 +399,9 @@ const MyProfile = () => {
             >
               <TextField
                 name="birthdate"
-                label="Birht Date"
+                label="Birth Date"
                 variant="outlined"
+                type="date"
                 value={formatDate(userData.birthdate)}
                 onChange={handleChange}
                 error={!!formErrors.birthdate}
@@ -378,7 +410,7 @@ const MyProfile = () => {
                   shrink: true,
                 }}
                 inputProps={{
-                  placeholder: "Birth Date",
+                  placeholder: "YYYY-MM-DD",
                 }}
                 sx={{ marginBottom: 2, width: "100%" }}
               />

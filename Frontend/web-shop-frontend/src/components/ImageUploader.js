@@ -1,19 +1,30 @@
-import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-const ImageUploader = ({ label, onImageChange, image }) => {
+const ImageUploader = ({
+  label,
+  onImageChange,
+  image,
+  setImage,
+  hasSet,
+}) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (!file) return;
+    console.log("B4 Exists");
 
+    if (!file) return;
+    console.log("Exists");
     const reader = new FileReader();
     reader.onload = () => {
       setSelectedImage(reader.result);
       onImageChange(file);
+      if (hasSet) {
+        setImage(reader.result);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -31,9 +42,13 @@ const ImageUploader = ({ label, onImageChange, image }) => {
           <img
             src={selectedImage}
             alt="Selected"
-            style={{ maxWidth: '100%', maxHeight: '300px', marginBottom: '10px' }}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "300px",
+              marginBottom: "10px",
+            }}
+            key={selectedImage}
           />
-          
         </Box>
       )}
       {!selectedImage && (
@@ -45,7 +60,7 @@ const ImageUploader = ({ label, onImageChange, image }) => {
         accept="image/*"
         type="file"
         id="image-upload"
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         onChange={handleImageUpload}
       />
       <label htmlFor="image-upload">

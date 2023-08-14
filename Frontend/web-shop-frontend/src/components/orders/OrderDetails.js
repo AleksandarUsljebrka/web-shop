@@ -52,6 +52,9 @@ const OrderDetails = () => {
     if (isLoading) {
       return;
     } else if (statusCode === 200 && !error && data) {
+      data?.items.forEach((item) => {
+        item.articleImage = 'data:image/*;base64,' + item.articleImage;
+      });
       setOrder(data);
       clearRequest();
     } else if (statusCode !== 200 && error) {

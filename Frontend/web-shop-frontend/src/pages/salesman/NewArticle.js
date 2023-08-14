@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { Typography, Container, TextField, Button, Box } from "@mui/material";
 import useService from "../../services/useService";
 import { useNavigate } from "react-router-dom";
+import ImageUploader from "../../components/ImageUploader";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -28,14 +29,19 @@ const NewArticle = () => {
     description: "",
     quantity: 1,
     price: 1,
+    productImage :null
   });
   const [formErrors, setFormErrors] = useState({});
+  const [productImage, setArticleImage] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       console.log(formData);
+
+     
+
       newArticleRequest(formData);
       navigate("/articles");
       console.log("Article added");
@@ -133,6 +139,15 @@ const NewArticle = () => {
             helperText={formErrors.quantity}
             sx={{ marginBottom: 2, width: "100%" }}
           />
+          <ImageUploader
+              image={productImage}
+              label={"Upload New Image"}
+              onImageChange={(imageFile) => {
+                setFormData({...formData, productImage:imageFile});
+              }}
+              
+              hasSet={false}
+            />
           <Button
             type="submit"
             variant="contained"

@@ -41,6 +41,7 @@ const getProfileImageUrl =
   baseUrl + process.env.REACT_APP_GET_PROFILE_IMAGE_URL;
 const changeProfileImageUrl =
   baseUrl + process.env.REACT_APP_CHANGE_PROFILE_IMAGE_URL;
+  const allOrdersUrl = baseUrl + process.env.REACT_APP_ALL_ORDERS_URL;
 const useService = () => {
   const {
     data,
@@ -112,6 +113,7 @@ const useService = () => {
 
   const updateSalesmanStatusRequest = useCallback(
     (data) => {
+      console.log("service");
       putRequest(updateSalesmanStatusUrl, data);
     },
     [putRequest]
@@ -191,6 +193,10 @@ const useService = () => {
     },
     [putRequestFormData]
   );
+  const getAllOrdersRequest = useCallback(() => {
+    getRequest(allOrdersUrl);
+  }, [getRequest]);
+
 
   return {
     data,
@@ -222,6 +228,7 @@ const useService = () => {
     changePasswordRequest,
     getProfileImageRequest,
     updateProfileImageRequest,
+    getAllOrdersRequest
   };
 };
 

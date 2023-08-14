@@ -10,6 +10,7 @@ import {
   Typography,
   Button,
   Container,
+  Box
 } from "@mui/material";
 import useService from "../../services/useService";
 
@@ -40,10 +41,13 @@ const AllSalesmen = () => {
       getAllSalesmenRequest();
       setFetchedSalesmen(true);
       clearRequest();
-    } else if (statusCode === 200 && !error && fetchedSalesmen) {
+    } else if (statusCode === 200 && !error&& data && fetchedSalesmen) {
       setFetchedSalesmen(false);
       setSalesmen(data?.salesmen);
-
+      data?.salesmen.forEach((salesman) => {
+        salesman.salesmanProfileImage =
+          'data:image/*;base64,' + salesman.salesmanProfileImage;
+      });
       clearRequest();
     } else if (statusCode !== 200 && error) {
       console.log("Error: " + error);
@@ -74,6 +78,7 @@ const AllSalesmen = () => {
           <Table aria-label="Salesman Table">
             <TableHead>
               <TableRow>
+              <TableCell>Profile Image</TableCell>
                 <TableCell>Username</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Firstname</TableCell>
@@ -84,8 +89,23 @@ const AllSalesmen = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {salesmen.map((salesman) => (
-                <TableRow key={salesman.id}>
+              {salesmen && salesmen.map((salesman) => (
+                <TableRow key={salesman.username}>
+                  <TableCell component='th' align='center' scope='row'>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <img
+                        src={salesman.salesmanProfileImage}
+                        alt=''
+                        style={{ maxWidth: '120px', maxHeight: '120px' }}
+                      />
+                    </Box>
+                  </TableCell>
                   <TableCell>{salesman.username}</TableCell>
                   <TableCell>{salesman.email}</TableCell>
                   <TableCell>{salesman.firstname}</TableCell>
@@ -106,25 +126,25 @@ const AllSalesmen = () => {
                       </Typography>
                     </TableCell>
                   )}
-                </TableRow>
-              ))}
-              {getStatusString(salesmen.approvalStatus) === "Pending" && (
+                
+              {salesman.approvalStatus === 0 && (
                 <TableCell align="center">
                   <Button
                     variant="contained"
                     onClick={(e) => {
                       setUpdateStatus(true);
                       updateSalesmanStatusRequest({
-                        SalesmanApprovalStatus: true,
-                        SalesmanUsername: salesmen.username,
+                        ApprovalStatus: true,
+                        Username: salesman.username,
                       });
+                     
                     }}
                   >
                     Approve
                   </Button>
                 </TableCell>
               )}
-              {getStatusString(salesmen.approvalStatus) === "Pending" && (
+              {getStatusString(salesman.approvalStatus) === "Pending" && (
                 <TableCell align="center">
                   <Button
                     variant="contained"
@@ -132,8 +152,8 @@ const AllSalesmen = () => {
                     onClick={(e) => {
                       setUpdateStatus(true);
                       updateSalesmanStatusRequest({
-                        SalesmanApprovalStatus: false,
-                        SalesmanUsername: salesmen.username,
+                        ApprovalStatus: false,
+                        Username: salesman.username,
                       });
                     }}
                   >
@@ -141,6 +161,8 @@ const AllSalesmen = () => {
                   </Button>
                 </TableCell>
               )}
+              </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

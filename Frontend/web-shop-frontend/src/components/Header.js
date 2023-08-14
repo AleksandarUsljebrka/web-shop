@@ -54,6 +54,12 @@ const Header = () => {
             </Button>
           )}
 
+          {role === "admin" && (
+            <Button color="inherit" to="/all-orders" component={NavLink}>
+              All Orders
+            </Button>
+          )}
+
           {approvedSalesman && (
             <Button color="inherit" to="/articles" component={NavLink}>
               All Articles

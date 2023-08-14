@@ -26,7 +26,10 @@ const SalesmanArticles = () => {
     if (isLoading) {
       return;
     } else if (statusCode === 200 && !error && data) {
-      setArticles(data.articles);
+      data?.articles.forEach((item) => {
+        item.productImage = 'data:image/*;base64,' + item.productImage;
+        setArticles(data.articles);
+      });
 
       clearRequest();
     } else if (statusCode !== 200 && error) {
