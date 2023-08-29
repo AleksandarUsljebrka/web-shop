@@ -44,7 +44,7 @@ const NewArticle = () => {
 
       newArticleRequest(formData);
       navigate("/articles");
-      console.log("Article added");
+      
     } catch (errors) {
       console.log(formData);
 

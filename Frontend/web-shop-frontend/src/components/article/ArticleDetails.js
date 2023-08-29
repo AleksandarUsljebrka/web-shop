@@ -129,7 +129,7 @@ const ArticleDetails = () => {
           >
             <TextField
               name="name"
-              placeholder="Name"
+              label="Name"
               variant="outlined"
               value={article?.newName || ""}
               error={!!formErrors.name}
@@ -146,7 +146,7 @@ const ArticleDetails = () => {
             />
             <TextField
               name="description"
-              placeholder="Description"
+              label="Description"
               variant="outlined"
               value={article?.description || ""}
               error={!!formErrors.description}
@@ -160,7 +160,7 @@ const ArticleDetails = () => {
             />
             <TextField
               name="price"
-              placeholder="Price"
+              label="Price"
               variant="outlined"
               type="number"
               value={article?.price || ""}
@@ -175,7 +175,7 @@ const ArticleDetails = () => {
             />
             <TextField
               name="quantity"
-              placeholder="Quantity"
+              label="Quantity"
               variant="outlined"
               type="number"
               value={article?.quantity || ""}

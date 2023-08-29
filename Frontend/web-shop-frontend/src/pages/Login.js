@@ -1,27 +1,20 @@
 import { React, useState, useContext, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import AuthContext  from "../context/AuthContext";
-import {
-  Typography,
-  Container,
-  TextField,
-  Button,
-  Box,
- 
-} from "@mui/material";
+import AuthContext from "../context/AuthContext";
+import { Typography, Container, TextField, Button, Box } from "@mui/material";
 import * as yup from "yup";
 import useService from "../services/useService";
+import { GoogleLogin } from "@react-oauth/google";
 
 const loginSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
   password: yup
     .string()
     .min(4, "Password must be at least 6 characters")
-    .required("Password is required")
+    .required("Password is required"),
 });
 
 const Login = () => {
-
   const { loginRequest, isLoading, error, statusCode, data } = useService();
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
@@ -29,7 +22,6 @@ const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -37,14 +29,14 @@ const Login = () => {
     event.preventDefault();
     try {
       await loginSchema.validate(formData, { abortEarly: false });
-      console.log(formData)
+      console.log(formData);
       loginRequest(formData);
 
       console.log("Login successful");
-      console.log(authContext.isLoggedin)
-      console.log(statusCode)
+      console.log(authContext.isLoggedin);
+      console.log(statusCode);
     } catch (errors) {
-      console.log(formData)
+      console.log(formData);
 
       const errorMessages = {};
       errors.inner.forEach((error) => {
@@ -53,7 +45,7 @@ const Login = () => {
       setFormErrors(errorMessages);
     }
   };
-    
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -63,7 +55,6 @@ const Login = () => {
     console.log(value);
   };
 
-  
   useEffect(() => {
     if (isLoading) {
       return;
@@ -71,7 +62,6 @@ const Login = () => {
       console.log("successfull");
       console.log(statusCode);
       console.log(data);
-
     } else if (statusCode !== 200 && error) {
       console.log(statusCode, error);
     }
@@ -80,15 +70,19 @@ const Login = () => {
   useEffect(() => {
     if (data && statusCode === 200 && !authContext.isLoggedin) {
       authContext.login(data);
-      console.log(authContext.isLoggedin)
+      console.log(authContext.isLoggedin);
 
-      navigate('/');
+      navigate("/");
     }
   }, [statusCode, data, authContext, navigate]);
+  
+  const responseGoogle = (response) => {
+    console.log(response);
+   
+  };
 
   return (
     <div>
-      
       <Container
         sx={{
           display: "flex",
@@ -120,26 +114,26 @@ const Login = () => {
             User Sign in
           </Typography>
           <TextField
-              name="username"
-              label="Username"
-              variant="outlined"
-              value={formData.username}
-              onChange={handleChange}
-              error={!!formErrors.username}
-              helperText={formErrors.username}
-              sx={{ marginBottom: 2, width: "100%" }}
-            />
-             <TextField
-              name="password"
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={formData.password}
-              onChange={handleChange}
-              error={!!formErrors.password}
-              helperText={formErrors.password}
-              sx={{ marginBottom: 2, width: "100%" }}
-            />
+            name="username"
+            label="Username"
+            variant="outlined"
+            value={formData.username}
+            onChange={handleChange}
+            error={!!formErrors.username}
+            helperText={formErrors.username}
+            sx={{ marginBottom: 2, width: "100%" }}
+          />
+          <TextField
+            name="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            value={formData.password}
+            onChange={handleChange}
+            error={!!formErrors.password}
+            helperText={formErrors.password}
+            sx={{ marginBottom: 2, width: "100%" }}
+          />
           <Button
             type="submit"
             variant="contained"
@@ -148,6 +142,15 @@ const Login = () => {
           >
             Login
           </Button>
+          <Box sx={{ mt: 4, width: "100%" }}>
+            <GoogleLogin
+              clientId="40212839770-kdmco4dcg8a9i83dbmvh6iesi3m1tcie.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+          </Box>
           <Typography variant="body2" color={"black"} sx={{ marginTop: 2 }}>
             Don't have an account?{" "}
             <Link
@@ -161,6 +164,6 @@ const Login = () => {
       </Container>
     </div>
   );
-}
+};
 
-export default Login; 
+export default Login;
