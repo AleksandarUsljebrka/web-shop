@@ -69,11 +69,12 @@ namespace DataAccess.Helpers
 
 		public byte[] GetArticleProductImage(IArticle article)
 		{
-			string productImageName = article.ProductImage;
-			if (productImageName == null)
+			if (article == null || article.ProductImage == null)
 			{
-				return null;
+				return null; 
 			}
+
+			string productImageName = article.ProductImage;
 
 			string productImagePath = Path.Combine(Directory.GetCurrentDirectory(), ArticleRelativePath, productImageName);
 

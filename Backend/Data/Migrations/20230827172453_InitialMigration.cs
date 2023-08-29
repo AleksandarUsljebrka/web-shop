@@ -136,7 +136,7 @@ namespace Data.Migrations
                         column: x => x.ArticleId,
                         principalTable: "Articles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Items_Orders_OrderId",
                         column: x => x.OrderId,

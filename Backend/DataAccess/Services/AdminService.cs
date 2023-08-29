@@ -21,6 +21,7 @@ namespace DataAccess.Services
         private readonly IOrderHelper _orderHelper = new OrderHelper();
         private readonly IUserHelper _userHelper;
         private readonly IImageHelper _imageHelper = new ImageHelper();
+        private readonly IAuthHelper _authHelper = new AuthHelper();
         public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
@@ -110,9 +111,15 @@ namespace DataAccess.Services
             if (salesmanStatusDto.ApprovalStatus)
             {
                 salesman.ApprovalStatus = SalesmanStatus.Approved;
+                string emailMessage = $"Hello {salesman.Firstname}, your account is approved.";
+                _authHelper.SendEmail(emailMessage);
             }
             else
+            {
                 salesman.ApprovalStatus = SalesmanStatus.Denied;
+                string emailMessage = $"Hello {salesman.Firstname}, your account is denied.";
+                _authHelper.SendEmail(emailMessage);
+            }
 
             _unitOfWork.SalesmanRepository.Update((Salesman)salesman);
             _unitOfWork.SaveChanges();

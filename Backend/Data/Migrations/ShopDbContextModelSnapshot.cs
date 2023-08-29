@@ -256,7 +256,8 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Models.Article", "Article")
                         .WithMany("Items")
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Data.Models.Order", "Order")
                         .WithMany("Items")

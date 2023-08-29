@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    [Migration("20230721150740_InitialMigration")]
+    [Migration("20230827172453_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -258,7 +258,8 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Models.Article", "Article")
                         .WithMany("Items")
-                        .HasForeignKey("ArticleId");
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Data.Models.Order", "Order")
                         .WithMany("Items")

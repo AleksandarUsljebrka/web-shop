@@ -11,6 +11,8 @@ namespace Data.Configurations
 			builder.HasKey(x => x.Id);
 
 			builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+			builder.Property(x => x.ArticleId).IsRequired(false);
 		}
 	}
 }

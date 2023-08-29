@@ -7,6 +7,7 @@ using Data.Models;
 using AutoMapper;
 using DataAccess.Services.Interfaces;
 using DataAccess.Helpers;
+using FluentEmail.Core;
 
 namespace DataAccess.Services
 {
@@ -18,12 +19,15 @@ namespace DataAccess.Services
         private readonly IMapper _mapper;
         private readonly ITokenHelper _tokenHelper;
         private readonly IImageHelper _imageHelper = new ImageHelper();
+       
+
         public AuthService(IUnitOfWork unitOfWork, IMapper mapper, ITokenHelper tokenHelper)
         {
             _tokenHelper = tokenHelper;
             _unitOfWork = unitOfWork;
             _userHelper = new UserHelper(_unitOfWork);
             _mapper = mapper;
+        
       
         }
         public IResult Register(RegisterDto regDto)
@@ -61,6 +65,9 @@ namespace DataAccess.Services
                 salesman.Password = _authHelper.HashPassword(regDto.Password);
                 _imageHelper.UploadProfileImage(salesman, regDto.ProfileImage);
                 _unitOfWork.SalesmanRepository.Add(salesman);
+
+                string mailMessage = $"Hello {salesman.Firstname}, your account is created, please wait for approval from the Admin.";
+                _authHelper.SendEmail(mailMessage);
             }
             else
             {

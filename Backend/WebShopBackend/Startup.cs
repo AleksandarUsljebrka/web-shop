@@ -19,7 +19,6 @@ using DataAccess.Services.Interfaces;
 using DataAccess.Services;
 using DataAccess.Helpers;
 using DataAccess.Helpers.Interfaces;
-
 namespace WebShopBackend
 {
     public class Startup
@@ -51,10 +50,9 @@ namespace WebShopBackend
 
             services.AddDbContext<ShopDbContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("ShopDbConnectionString")));
-
+           
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

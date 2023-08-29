@@ -19,7 +19,7 @@ namespace Data.Configurations
 			builder.HasMany(x => x.Items)
 				.WithOne(x => x.Article)
 				.HasForeignKey(x => x.ArticleId)
-				.OnDelete(DeleteBehavior.ClientSetNull);
+				.OnDelete(DeleteBehavior.SetNull);
 		}
 	}
 }
