@@ -7,5 +7,8 @@ namespace DataAccess.Services.Interfaces
     {
         public IResult Register(RegisterDto regDto);
         public IResult Login(LoginDto logDto);
+        public IResult GoogleLogin(GoogleLoginDto idToken);
+        public IResult GoogleRegister(GoogleLoginDto idToken);
+
     }
 }

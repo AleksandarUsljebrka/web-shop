@@ -22,5 +22,16 @@ namespace Data.Models
 		public string ProfileImage { get; set; }
 
 		public DateTime Birthdate { get; set; }
+		public User(string firstname, string lastname, string username, string email,  string address, string profileImage, DateTime birthdate)
+		{
+			Firstname = firstname;
+			Lastname = lastname;
+			Username = username;
+			Email = email;
+			Address = address;
+			ProfileImage = profileImage;
+			Birthdate = birthdate;
+		}
+		public User() { }
 	}
 }

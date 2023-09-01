@@ -8,5 +8,6 @@ namespace DataAccess.DTO.Auth
         public string Username { get; set; }
         [Required(ErrorMessage = "Please enter password!")]
         public string Password { get; set; }
+        public string GoogleToken { get; set; }
     }
 }

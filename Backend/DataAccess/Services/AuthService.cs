@@ -8,6 +8,8 @@ using AutoMapper;
 using DataAccess.Services.Interfaces;
 using DataAccess.Helpers;
 using FluentEmail.Core;
+using Google.Apis.Auth;
+using System;
 
 namespace DataAccess.Services
 {
@@ -82,6 +84,8 @@ namespace DataAccess.Services
         public IResult Login(LoginDto logDto)
         {
             IResult result;
+
+
             IUser user = _userHelper.UserByUsername(logDto.Username);
             if (user == null)
             {
@@ -99,5 +103,89 @@ namespace DataAccess.Services
             result = new Result(true, tokenDto);
             return result;
         }
+        public IResult GoogleLogin(GoogleLoginDto idToken)
+        {
+            IResult result;
+           
+            GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(idToken.Credential).Result;
+
+            IUser user = _userHelper.UserByEmail(payload.Email);
+            if (user == null)
+            {
+                result = new Result(false, ErrorCode.NotFound, "User not found");
+                return result;
+            }
+
+            string token = _tokenHelper.GetTokenGoogle(user);
+
+            if (token == null)
+            {
+                result = new Result(false, ErrorCode.BadRequest, "Bad request");
+                return result;
+            }
+            TokenDto tokenDto = new TokenDto(token);
+          
+            result = new Result(true, tokenDto);
+            return result;
+            
+           
+        }
+
+        public IResult GoogleRegister(GoogleLoginDto idToken)
+        {
+            IResult result;
+
+            GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(idToken.Credential).Result;
+
+            IUser user = _userHelper.UserByEmail(payload.Email);
+            if (user == null)
+            {
+                string[] parts = payload.Email.Split('@');
+                string username = parts[0];
+                string address = username+"adr";
+                DateTime birthdate = new DateTime(2000, 6, 15);
+
+                Customer customer = new Customer(payload.Name, payload.FamilyName, username, payload.Email, address, null, birthdate);
+                customer.Password = _authHelper.HashPassword("");
+              //  _imageHelper.UploadProfileImage(customer, regDto.ProfileImage);
+                _unitOfWork.CustomerRepository.Add(customer);
+            }
+            else
+            {
+                result = new Result(false, ErrorCode.Conflict, "User already exists!");
+                return result;
+            }
+
+            _unitOfWork.SaveChanges();
+
+            result = new Result(true);
+            return result;
+            //string token = _tokenHelper.GetToken(user);
+
+            //if (token == null)
+            //{
+            //    result = new Result(false, ErrorCode.BadRequest, "Bad request");
+            //    return result;
+            //}
+            //TokenDto tokenDto = new TokenDto(token);
+
+            //result = new Result(true, tokenDto);
+            //return result;
+
+
+        }
+        //private string VerifyGoogleToken(string googleToken)
+        //{
+        //    try
+        //    {
+        //        var payload = GoogleJsonWebSignature.ValidateAsync(googleToken, new GoogleJsonWebSignature.ValidationSettings()).Result;
+        //        return payload.Subject;
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+
     }
 }

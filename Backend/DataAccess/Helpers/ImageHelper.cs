@@ -126,18 +126,22 @@ namespace DataAccess.Helpers
 		}
 		public bool UploadProfileImage(IUser user, IFormFile profileImage)
 		{
-			string path = Path.Combine(UserRelativePath, user.ProfileImage);
-
-			if (File.Exists(path))
-			{
-				File.Delete(path);
-			}
-
 			if (profileImage == null)
+				return false;
+			if (user.ProfileImage != null)
 			{
-				return true;
-			}
+				string path = Path.Combine(UserRelativePath, user.ProfileImage);
 
+				if (File.Exists(path))
+				{
+					File.Delete(path);
+				}
+
+				if (profileImage == null)
+				{
+					return true;
+				}
+			}
 			string profileImageDir = Path.Combine(Directory.GetCurrentDirectory(), UserRelativePath);
 
 			if (!Directory.Exists(profileImageDir))
