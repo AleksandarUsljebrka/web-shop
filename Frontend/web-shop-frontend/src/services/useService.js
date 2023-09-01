@@ -41,7 +41,10 @@ const getProfileImageUrl =
   baseUrl + process.env.REACT_APP_GET_PROFILE_IMAGE_URL;
 const changeProfileImageUrl =
   baseUrl + process.env.REACT_APP_CHANGE_PROFILE_IMAGE_URL;
-  const allOrdersUrl = baseUrl + process.env.REACT_APP_ALL_ORDERS_URL;
+const allOrdersUrl = baseUrl + process.env.REACT_APP_ALL_ORDERS_URL;
+const googleLoginUrl = baseUrl + process.env.REACT_APP_GOOGLE_LOGIN_URL;
+const googleRegisterUrl = baseUrl + process.env.REACT_APP_GOOGLE_REGISTER_URL; 
+
 const useService = () => {
   const {
     data,
@@ -65,9 +68,23 @@ const useService = () => {
     [postRequestFormData]
   );
 
+  const googleRegisterRequest = useCallback(
+    (credentials) => {
+      postRequest(googleRegisterUrl, credentials);
+    },
+    [postRequest]
+  );
+
+
   const loginRequest = useCallback(
     (credentials) => {
       postRequest(loginUrl, credentials);
+    },
+    [postRequest]
+  );
+  const googleLoginRequest = useCallback(
+    (credentials) => {
+      postRequest(googleLoginUrl, credentials);
     },
     [postRequest]
   );
@@ -205,7 +222,9 @@ const useService = () => {
     statusCode,
     clearRequest: resetHttp,
     registerRequest,
+    googleRegisterRequest,
     loginRequest,
+    googleLoginRequest,
     newArticleRequest,
     getSalesmanArticlesRequest,
     updateSalesmanStatusRequest,

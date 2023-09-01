@@ -18,6 +18,7 @@ export const AuthContextProvider=({children})=>{
       role: "",
       status: null,
       rawToken: "",
+      logKind: ""
     });
     const[isLoggedin, setIsLoggedin] = useState(false);
 
@@ -60,6 +61,7 @@ export const AuthContextProvider=({children})=>{
             role: user.role,
             rawToken: user.rawToken,
             status: user.status,
+            logKind: user.logKind
           }}
         >
           {children}

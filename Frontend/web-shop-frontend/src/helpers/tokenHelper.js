@@ -75,6 +75,11 @@ export const getStatus = () => {
   return token?.status;
 };
 
+export const getLogKind = () => {
+  const token = getToken();
+
+  return token?.logKind;
+};
 export const getUser = () => {
   const user = {
     username: getUsername(),
@@ -82,6 +87,7 @@ export const getUser = () => {
     id: getId(),
     status: getStatus(),
     rawToken: getRawToken(),
+    logKind: getLogKind()
   };
 
   return user;

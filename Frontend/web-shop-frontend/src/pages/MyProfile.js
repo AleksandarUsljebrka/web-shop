@@ -13,6 +13,7 @@ import * as yup from "yup";
 import useService from "../services/useService";
 import ImageUploader from "../components/ImageUploader";
 import AuthContext from "../context/AuthContext";
+import { useLocation } from "react-router-dom/dist";
 
 const userDataSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -38,7 +39,7 @@ const userPasswordSchema = yup.object().shape({
 });
 
 const MyProfile = () => {
-  const { role, status } = useContext(AuthContext);
+  const { role, status, logKind } = useContext(AuthContext);
   const {
     getUserProfileRequest,
     getProfileImageRequest,
@@ -264,7 +265,7 @@ const MyProfile = () => {
                   </Typography>
                 )}
             </Box>
-            <Paper
+            {logKind.toLowerCase()==="form" && ( <Paper
               component="form"
               sx={{ marginTop: "10px", width: "30%", alignItems: "center" }}
               elevation={4}
@@ -322,7 +323,7 @@ const MyProfile = () => {
                   Change password
                 </Button>
               </Box>
-            </Paper>
+            </Paper>)}
           </Box>
           <Paper
             component="form"

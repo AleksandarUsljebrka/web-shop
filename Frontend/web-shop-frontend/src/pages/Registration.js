@@ -18,6 +18,7 @@ import * as yup from "yup";
 import useService from "../services/useService";
 import Header from "../components/Header";
 import ImageUploader from "../components/ImageUploader";
+import { GoogleLogin } from "@react-oauth/google";
 
 const registrationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -41,8 +42,11 @@ const registrationSchema = yup.object().shape({
 });
 
 const Registration = () => {
-  const { registerRequest, isLoading, error, statusCode } = useService();
+  const { registerRequest, googleRegisterRequest, isLoading, error, statusCode } = useService();
   const navigate = useNavigate();
+
+  const [isGoogleRegistered, setGoogleRegister] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     firstName: "",
@@ -64,17 +68,8 @@ const Registration = () => {
       await registrationSchema.validate(formData, { abortEarly: false });
       console.log(formData);
 
-     /* const formDataToSend = new FormData();
-      for (const key in formData) {
-        if (key === "profileImage") {
-          formDataToSend.append(key, formData[key]);
-        } else {
-          formDataToSend.append(key, JSON.stringify(formData[key]));
-        }
-      }*/
-
       registerRequest(formData);
-
+      setGoogleRegister(false);
       console.log("Registration successful");
     } catch (errors) {
       console.log(formData);
@@ -99,19 +94,20 @@ const Registration = () => {
   useEffect(() => {
     if (isLoading) {
       return;
-    } else if (statusCode === 200 && !error) {
-      navigate("/login");
+    } else if ((statusCode === 200 || statusCode === 204) && !error) {
+      navigate("/login",{state:{isGoogleRegistered:isGoogleRegistered}});
     }
   }, [isLoading, statusCode, error, navigate]);
 
-  /* const handleImageChange = (event) => {
-    const imageFile = event.target.files[0];
-    setFormData({
-      ...formData,
-      profileImage: imageFile.name,
-    });
-  };
-  */
+  const responseMessage = (response) => {
+    console.log(response);
+    googleRegisterRequest(response);
+    setGoogleRegister(true);
+    
+};
+const errorMessage = (error) => {
+    console.log(error);
+};
 
   return (
     <div>
@@ -314,6 +310,10 @@ const Registration = () => {
           >
             Register
           </Button>
+          <GoogleLogin
+              onSuccess={responseMessage}
+              onFailure={errorMessage}
+            />
           <Typography color={"black"} variant="body2" sx={{ marginTop: 2 }}>
             Already have an account?{" "}
             <Link

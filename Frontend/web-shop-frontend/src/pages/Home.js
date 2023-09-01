@@ -1,15 +1,22 @@
-import { Typography, Button, Container, Box } from "@mui/material";
+import { Typography, Button, Container, Box, Snackbar, Alert } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { isLoggedin } from "../helpers/tokenHelper";
 import AuthContext from "../context/AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { useLocation } from "react-router-dom/dist";
 const Home = () => {
   const { username, ...authContext } = useContext(AuthContext);
+  const [showPasswordChangeAlert, setShowPasswordChangeAlert] = useState(false);
 
   const isLoggedin = authContext.isLoggedin;
   const role = isLoggedin && authContext.role.toLowerCase();
   const approvedSalesman = authContext.status?.toLowerCase() === "approved";
+ // const location = useLocation();
+ // const isGoogleRegistered = location.state?.isGoogleRegistered;
 
+ /* if(isGoogleRegistered){
+    setShowPasswordChangeAlert(true);
+  }*/
   return (
     <Container
       sx={{
@@ -20,6 +27,7 @@ const Home = () => {
       }}
     >
       <div>
+    
         <Typography variant="h4" gutterBottom>
           Welcome to Online Shop!
         </Typography>

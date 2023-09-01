@@ -5,6 +5,7 @@ import { Typography, Container, TextField, Button, Box } from "@mui/material";
 import * as yup from "yup";
 import useService from "../services/useService";
 import { GoogleLogin } from "@react-oauth/google";
+import { useLocation } from "react-router-dom/dist";
 
 const loginSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -15,10 +16,18 @@ const loginSchema = yup.object().shape({
 });
 
 const Login = () => {
-  const { loginRequest, isLoading, error, statusCode, data } = useService();
+  const {
+    loginRequest,
+    googleLoginRequest,
+    isLoading,
+    error,
+    statusCode,
+    data,
+  } = useService();
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const logKind = authContext.logKind;
+  
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -75,10 +84,13 @@ const Login = () => {
       navigate("/");
     }
   }, [statusCode, data, authContext, navigate]);
-  
-  const responseGoogle = (response) => {
+
+  const responseMessage = (response) => {
     console.log(response);
-   
+    googleLoginRequest(response);
+  };
+  const errorMessage = (error) => {
+    console.log(error);
   };
 
   return (
@@ -108,49 +120,46 @@ const Login = () => {
             width: "100%",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
+            gap: 2,
           }}
         >
           <Typography color={"black"} variant="h5" gutterBottom>
             User Sign in
           </Typography>
-          <TextField
-            name="username"
-            label="Username"
-            variant="outlined"
-            value={formData.username}
-            onChange={handleChange}
-            error={!!formErrors.username}
-            helperText={formErrors.username}
-            sx={{ marginBottom: 2, width: "100%" }}
-          />
-          <TextField
-            name="password"
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={formData.password}
-            onChange={handleChange}
-            error={!!formErrors.password}
-            helperText={formErrors.password}
-            sx={{ marginBottom: 2, width: "100%" }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ width: "100%", marginTop: 2 }}
-          >
-            Login
-          </Button>
-          <Box sx={{ mt: 4, width: "100%" }}>
-            <GoogleLogin
-              clientId="40212839770-kdmco4dcg8a9i83dbmvh6iesi3m1tcie.apps.googleusercontent.com"
-              buttonText="Login with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
-          </Box>
+          
+            <Box>
+              <TextField
+                name="username"
+                label="Username"
+                variant="outlined"
+                value={formData.username}
+                onChange={handleChange}
+                error={!!formErrors.username}
+                helperText={formErrors.username}
+                sx={{ marginBottom: 2, width: "100%" }}
+              />
+              <TextField
+                name="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={formData.password}
+                onChange={handleChange}
+                error={!!formErrors.password}
+                helperText={formErrors.password}
+                sx={{ marginBottom: 2, width: "100%" }}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ width: "100%", marginTop: 2 }}
+              >
+                Login
+              </Button>
+            </Box>
+        
+          <GoogleLogin onSuccess={responseMessage} onFailure={errorMessage} />
           <Typography variant="body2" color={"black"} sx={{ marginTop: 2 }}>
             Don't have an account?{" "}
             <Link
