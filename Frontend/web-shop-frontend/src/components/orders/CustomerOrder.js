@@ -18,10 +18,14 @@ import {
   TableContainer,
 } from "@mui/material";
 
+import { PaypalCheckoutButton } from "../PaypalCheckoutButton";
+
 const CustomerOrder = () => {
-  const { updateOrder, ...orderContext } = useContext(OrderContext);
+  const [isCashOnDeliveryChecked, setCashOnDeliveryChecked] = useState(false);
+  const { updateOrder, setOrderPaid, isPaid, ...orderContext } =
+    useContext(OrderContext);
   const [order, setOrder] = useState(orderContext.order);
-  const [formErrors, setFormErrors] = useState({helper:''});
+  const [formErrors, setFormErrors] = useState({ helper: "" });
   const {
     postCustomerOrderRequest,
     clearRequest,
@@ -34,6 +38,18 @@ const CustomerOrder = () => {
   useEffect(() => {
     updateOrder(order);
   }, [order, updateOrder]);
+
+  useEffect(() => {
+    // updateOrder na prazan objekat jer ti vise ne treba to, poruceno je
+    // redirekcija na stranicu da je "Success, all is paid for"
+    // i posle korisnik bira iz navigacije
+    // postavi isPaid na false
+    if (isPaid) {
+      alert("Thank you for your purchase!");
+      setOrderPaid(false);
+      placeOrder();
+    }
+  }, [isPaid, setOrderPaid, updateOrder]);
 
   useEffect(() => {
     if (isLoading) {
@@ -49,12 +65,10 @@ const CustomerOrder = () => {
   }, [isLoading, error, statusCode, navigate, orderContext, clearRequest]);
 
   const placeOrder = () => {
-    if (order.address.length < 4) {
-      setFormErrors({helper:"Address must be at least 4 characters long"});
-    } else {
-      if (Object.keys(order.items).length > 0) {
-        postCustomerOrderRequest(orderContext.getOrderDto());
-      }
+    if (Object.keys(order.items).length > 0) {
+      var placedOrder = orderContext.getOrderDto();
+      // order = { ...order, isPaid };
+      postCustomerOrderRequest(placedOrder);
     }
   };
 
@@ -62,101 +76,125 @@ const CustomerOrder = () => {
   Object.values(order.articles).forEach((article) => {
     totalPrice += article.price * order.items[article.id];
   });
+
+  const handleCashOnDeliveryChange = () => {
+    setCashOnDeliveryChecked(!isCashOnDeliveryChecked);
+    setOrderPaid(true);
+  };
+
   return (
     <div>
-       
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            marginTop: "-160px",
-          }}
-        >
-          <Paper>
-            <Box
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          marginTop: "-80px",
+          gap: 5,
+        }}
+      >
+        <Paper>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              p: 4,
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              maxWidth: "600px",
+              width: "100%",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              backgroundColor: "#fff",
+            }}
+          >
+            <TextField
+              name="commment"
+              placeholder="Comment"
+              variant="outlined"
+              value={order?.comment}
+              onChange={(e) => {
+                setOrder((old) => {
+                  return { ...old, comment: e.target.value };
+                });
+              }}
+              sx={{ marginBottom: 2, width: "100%" }}
+            />
+            <TextField
+              name="address"
+              placeholder="Address"
+              variant="outlined"
+              value={order?.address || ""}
+              error={!!formErrors.helper}
+              helperText={formErrors.helper ? formErrors.helper : " "}
+              onChange={(e) => {
+                setOrder((old) => {
+                  return { ...old, address: e.target.value };
+                });
+              }}
+              sx={{
+                marginBottom: 2,
+                width: "100%",
+                "& .MuiFormHelperText-root": {
+                  color: "red",
+                },
+              }}
+            />
+            <TextField
+              name="totalPrice"
+              placeholder="Total Price"
+              variant="outlined"
+              type="number"
+              value={totalPrice}
+              disabled
+              inputProps={{
+                readOnly: true,
+                style: {
+                  textAlign: "center",
+                  fontSize: "20px",
+                },
+              }}
+              sx={{ marginBottom: 2, width: "100%" }}
+            />
+            <Container
               sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 alignItems: "center",
-                p: 4,
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                maxWidth: "600px",
-                width: "100%",
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                backgroundColor: "#fff",
+                p: 2,
+                justifyContent: "space-between",
               }}
             >
-              <TextField
-                name="commment"
-                placeholder="Comment"
-                variant="outlined"
-                value={order?.comment}
-                onChange={(e) => {
-                  setOrder((old) => {
-                    return { ...old, comment: e.target.value };
-                  });
-                }}
-                sx={{ marginBottom: 2, width: "100%" }}
-              />
-              <TextField
-                name="address"
-                placeholder="Address"
-                variant="outlined"
-                value={order?.address || ""}
-                error={!!formErrors.helper}
-                helperText={formErrors.helper ? formErrors.helper : " "}
-                onChange={(e) => {
-                  setOrder((old) => {
-                    return { ...old, address: e.target.value };
-                  });
-                }}
-                sx={{
-                    
-                  marginBottom: 2,
-                  width: "100%",
-                  "& .MuiFormHelperText-root": {
-                    color: "red", // Postavite željenu boju ovde
-                  },
-                }}
-              />
-              <TextField
-                name="totalPrice"
-                placeholder="Total Price"
-                variant="outlined"
-                type="number"
-                value={totalPrice}
-                disabled
-                inputProps={{
-                  readOnly: true,
-                  style: {
-                    textAlign: "center",
-                    fontSize: "20px",
-                  },
-                }}
-                sx={{ marginBottom: 2, width: "100%" }}
-              />
-
               <Box>
                 <Button
+                  disabled={order.address.length < 4}
                   type="submit"
                   variant="contained"
                   color="primary"
-                  sx={{ width: "100%", marginTop: 2 }}
+                  sx={{
+                    width: "100%",
+                    marginTop: 0,
+                    backgroundColor: "#616161",
+                  }}
                   onClick={(event) => {
                     placeOrder();
                   }}
                 >
-                  Place Order
+                  Cash on Delivery
                 </Button>
               </Box>
-            </Box>
-          </Paper>
-        </Container>
-      
+              <PaypalCheckoutButton
+                isDisabled={order.address.length < 4}
+                orderPrice={totalPrice}
+              ></PaypalCheckoutButton>
+            </Container>
+           
+          </Box>
+        </Paper>
+      </Container>
+
       {Object.keys(order.articles).length > 0 && (
         <Container
           sx={{
@@ -234,8 +272,10 @@ const CustomerOrder = () => {
           </TableContainer>
         </Container>
       )}
-      { Object.keys(order.items).length === 0 && (
-        <Container sx={{ display: "flex", justifyContent: "center" }}>
+      {Object.keys(order.items).length === 0 && (
+        <Container
+          sx={{ color: "black", display: "flex", justifyContent: "center" }}
+        >
           <Paper
             sx={{
               width: "60%",
@@ -244,11 +284,12 @@ const CustomerOrder = () => {
               textAlign: "center",
               marginTop: "-110px",
               padding: "20px",
-              
+              color: "black",
+              backgroundColor: "#424242",
             }}
             elevation={4}
           >
-            <Typography variant="h3" color="primary">
+            <Typography variant="h3" color="white">
               No items to show...
             </Typography>
           </Paper>

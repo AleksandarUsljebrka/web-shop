@@ -122,10 +122,12 @@ const Articles = ({ data, buttonFunction, buttonText }) => {
               textAlign: "center",
               marginTop: "10vh",
               padding: "20px",
+              color: "black",
+              backgroundColor: "#424242",
             }}
             elevation={4}
           >
-            <Typography variant="h3" color="primary">
+            <Typography variant="h3" color="white">
               No articles to show...
             </Typography>
           </Paper>

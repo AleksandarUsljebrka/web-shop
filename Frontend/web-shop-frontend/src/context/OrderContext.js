@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from "react";
 
 const OrderContext = createContext({
   addItemToOrder: (article, quantity) => {},
@@ -7,19 +7,22 @@ const OrderContext = createContext({
   hasArticleWithId: (articleId) => {},
   hasItems: () => {},
   getOrderDto: () => {},
+  setOrderPaid: () => {},
   order: {},
   items: {},
+  isPaid: false,
 });
 
 export const OrderContextProvider = ({ children }) => {
   const [order, setOrder] = useState(orderInit);
+  const [isPaid, setIsPaid] = useState(false);
 
   const addToLocalStorage = useCallback(() => {
-    window.localStorage.setItem('order', JSON.stringify(order));
+    window.localStorage.setItem("order", JSON.stringify(order));
   }, [order]);
 
   const removeFromLocalStorage = useCallback(() => {
-    window.localStorage.removeItem('order');
+    window.localStorage.removeItem("order");
   }, []);
 
   useEffect(() => {
@@ -49,8 +52,9 @@ export const OrderContextProvider = ({ children }) => {
       ...prevOrder,
       items: {},
       articles: {},
-      address: '',
-      comment: '',
+      address: "",
+      comment: "",
+      isPaid: false,
     }));
 
     removeFromLocalStorage();
@@ -99,7 +103,12 @@ export const OrderContextProvider = ({ children }) => {
       items: transformedArray,
     };
   }, [order]);
-
+  const setOrderPaid = useCallback(
+    (isPaid) => {
+      setIsPaid(isPaid);
+    },
+    [setIsPaid]
+  );
   return (
     <OrderContext.Provider
       value={{
@@ -109,8 +118,10 @@ export const OrderContextProvider = ({ children }) => {
         hasArticleWithId,
         hasItems,
         getOrderDto,
+        setOrderPaid,
         order,
         items: order.items,
+        isPaid
       }}
     >
       {children}
@@ -119,10 +130,11 @@ export const OrderContextProvider = ({ children }) => {
 };
 
 const orderInit = {
-  comment: '',
-  address: '',
+  comment: "",
+  address: "",
   items: {},
   articles: {},
+ 
 };
 
 export default OrderContext;

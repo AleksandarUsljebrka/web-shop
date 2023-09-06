@@ -111,7 +111,7 @@ const MyProfile = () => {
     } else if (statusCode === 200 && !error && updatePassword) {
       setUpdatePassword(false);
       clearRequest();
-      console.log("Updated password");
+      alert("Updated password");
     } else if (statusCode !== 200 && error && updateImg) {
       setUpdateImg(false);
       setFetchImg(true);
@@ -179,7 +179,6 @@ const MyProfile = () => {
 
       changePasswordRequest(userPassword);
 
-      console.log("Update pasword successful");
     } catch (errors) {
       const errorMessages = {};
       errors.inner.forEach((error) => {
@@ -231,7 +230,7 @@ const MyProfile = () => {
               justifyContent: "space-between",
             }}
           >
-            <ImageUploader
+           {logKind.toLowerCase()==="form" && (<ImageUploader
               image={profileImage}
               label={"Upload New Image"}
               onImageChange={(imageFile) => {
@@ -243,7 +242,7 @@ const MyProfile = () => {
               }}
               setImage={setProfileImage}
               hasSet={true}
-            />
+            />)}
             <Box
               sx={{ justifyContent: "center", gap: "0px" }}
             >

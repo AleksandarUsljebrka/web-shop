@@ -72,7 +72,7 @@ const Login = () => {
       console.log(statusCode);
       console.log(data);
     } else if (statusCode !== 200 && error) {
-      console.log(statusCode, error);
+      alert(error);
     }
   }, [isLoading, statusCode, error]);
 

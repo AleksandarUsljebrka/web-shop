@@ -20,6 +20,7 @@ import PendingOrdersSalesman from "./pages/salesman/PendingOrdersSalesman";
 import FinishedOrdersSalesman from "./pages/salesman/FinishedOrdersSalesman";
 import MyProfile from "./pages/MyProfile";
 import AllOrdersAdmin from "./pages/admin/AllOrdersAdmin";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -34,85 +35,117 @@ function App() {
   }, [loadUser]);
 
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-      </Route>
+    <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID}}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+        </Route>
 
-      <Route path="/registration" element={<Layout />}>
-        {!isLoggedin && <Route index element={<Registration />} />}
-        {isLoggedin && <Route index element={<Home />} />}
-      </Route>
+        <Route path="/registration" element={<Layout />}>
+          {!isLoggedin && <Route index element={<Registration />} />}
+          {isLoggedin && <Route index element={<Home />} />}
+        </Route>
 
-      <Route path="/login" element={<Layout />}>
-        {!isLoggedin && <Route index element={<Login />} />}
-        {isLoggedin && <Route index element={<Home />} />}
-      </Route>
+        <Route path="/login" element={<Layout />}>
+          {!isLoggedin && <Route index element={<Login />} />}
+          {isLoggedin && <Route index element={<Home />} />}
+        </Route>
 
-      <Route path="/my-profile" element={<Layout />}>
-        {isLoggedin && <Route index element={<MyProfile />} />}
-      </Route>
+        <Route path="/my-profile" element={<Layout />}>
+          {isLoggedin && <Route index element={<MyProfile />} />}
+        </Route>
 
-      {role === 'admin' && <Route path="/all-salesmen" element={<Layout />}>
-        <Route index element={<AllSalesmen />} />
-      </Route>}
+        {role === "admin" && (
+          <Route path="/all-salesmen" element={<Layout />}>
+            <Route index element={<AllSalesmen />} />
+          </Route>
+        )}
 
-      {role === 'admin' && <Route path="/all-orders" element={<Layout />}>
-        <Route index element={<AllOrdersAdmin />} />
-      </Route>}
-      
-      {role === 'admin' && <Route path="/all-orders/:id" element={<Layout />}>
-        <Route index element={<OrderDetails />} />
-      </Route>}
+        {role === "admin" && (
+          <Route path="/all-orders" element={<Layout />}>
+            <Route index element={<AllOrdersAdmin />} />
+          </Route>
+        )}
 
+        {role === "admin" && (
+          <Route path="/all-orders/:id" element={<Layout />}>
+            <Route index element={<OrderDetails />} />
+          </Route>
+        )}
 
-      {approvedSalesman && <Route path="/articles" element={<Layout />}>
-        <Route index element={<SalesmanArticles />} />
-      </Route>}
+        {approvedSalesman && (
+          <Route path="/articles" element={<Layout />}>
+            <Route index element={<SalesmanArticles />} />
+          </Route>
+        )}
 
-      {approvedSalesman && <Route path="/new-article" element={<Layout />}>
-        <Route index element={<NewArticle />} />
-      </Route>}
+        {approvedSalesman && (
+          <Route path="/new-article" element={<Layout />}>
+            <Route index element={<NewArticle />} />
+          </Route>
+        )}
 
-      {approvedSalesman && <Route path="/articles/:name" element={<Layout />}>
-        <Route index element={<ArticleDetails />} />
-      </Route>}
+        {approvedSalesman && (
+          <Route path="/articles/:name" element={<Layout />}>
+            <Route index element={<ArticleDetails />} />
+          </Route>
+        )}
 
-      {approvedSalesman && <Route path="/pending-orders/" element={<Layout />}>
-        <Route index element={<PendingOrdersSalesman />} />
-      </Route>}
-      {approvedSalesman && <Route path="/pending-orders/:id" element={<Layout />}>
-        <Route index element={<OrderDetails />} />
-      </Route>}
+        {approvedSalesman && (
+          <Route path="/pending-orders/" element={<Layout />}>
+            <Route index element={<PendingOrdersSalesman />} />
+          </Route>
+        )}
+        {approvedSalesman && (
+          <Route path="/pending-orders/:id" element={<Layout />}>
+            <Route index element={<OrderDetails />} />
+          </Route>
+        )}
 
-      {approvedSalesman && <Route path="/finished-orders" element={<Layout />}>
-        <Route index element={<FinishedOrdersSalesman />} />
-      </Route>}
-      {approvedSalesman && <Route path="/finished-orders/:id" element={<Layout />}>
-        <Route index element={<OrderDetails />} />
-      </Route>}
+        {approvedSalesman && (
+          <Route path="/finished-orders" element={<Layout />}>
+            <Route index element={<FinishedOrdersSalesman />} />
+          </Route>
+        )}
+        {approvedSalesman && (
+          <Route path="/finished-orders/:id" element={<Layout />}>
+            <Route index element={<OrderDetails />} />
+          </Route>
+        )}
 
-      {role ==="customer" && <Route path="/articles" element={<Layout />}>
-        <Route index element={<CustomerArticles />} />
-      </Route>}
+        {role === "customer" && (
+          <Route path="/articles" element={<Layout />}>
+            <Route index element={<CustomerArticles />} />
+          </Route>
+        )}
 
-      {role ==="customer" && <Route path="/order/" element={<Layout />}>
-        <Route index element={<Order />} />
-      </Route>}
-      {role ==="customer" && <Route path="/pending-orders/" element={<Layout />}>
-        <Route index element={<PendingOrdersCustomer />} />
-      </Route>}
-      {role ==="customer" && <Route path="/pending-orders/:id" element={<Layout />}>
-        <Route index element={<OrderDetails />} />
-      </Route>}
-      {role ==="customer" && <Route path="/finished-orders" element={<Layout />}>
-        <Route index element={<FinishedOrdersCustomer />} />
-      </Route>}
-      {role ==="customer" && <Route path="/finished-orders/:id" element={<Layout />}>
-        <Route index element={<OrderDetails />} />
-      </Route>}
-      
-    </Routes>
+        {role === "customer" && (
+          <Route path="/order/" element={<Layout />}>
+            <Route index element={<Order />} />
+          </Route>
+        )}
+        {role === "customer" && (
+          <Route path="/pending-orders/" element={<Layout />}>
+            <Route index element={<PendingOrdersCustomer />} />
+          </Route>
+        )}
+        {role === "customer" && (
+          <Route path="/pending-orders/:id" element={<Layout />}>
+            <Route index element={<OrderDetails />} />
+          </Route>
+        )}
+        {role === "customer" && (
+          <Route path="/finished-orders" element={<Layout />}>
+            <Route index element={<FinishedOrdersCustomer />} />
+          </Route>
+        )}
+        {role === "customer" && (
+          <Route path="/finished-orders/:id" element={<Layout />}>
+            <Route index element={<OrderDetails />} />
+          </Route>
+        )}
+      </Routes>
+    </PayPalScriptProvider>
   );
 }
 
