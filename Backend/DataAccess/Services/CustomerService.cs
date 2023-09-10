@@ -17,7 +17,7 @@ namespace DataAccess.Services
     //DONE
     public class CustomerService:ICustomerService
     {
-        private double deliveryPrice = 300;
+        private double deliveryPrice = 3;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserHelper _userHelper;
