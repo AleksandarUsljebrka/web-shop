@@ -14,10 +14,10 @@ const ImageUploader = ({
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    console.log("B4 Exists");
+   
 
     if (!file) return;
-    console.log("Exists");
+  
     const reader = new FileReader();
     reader.onload = () => {
       setSelectedImage(reader.result);

@@ -88,7 +88,7 @@ const Articles = ({ data, buttonFunction, buttonText }) => {
                       {row.quantity}
                     </TableCell>
                     <TableCell align="center" sx={{ fontSize: "18px" }}>
-                      {row.price}
+                    {`$${row.price}`}
                     </TableCell>
                     {!orderContext.hasArticleWithId(row.id) && (
                       <TableCell align="center">

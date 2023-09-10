@@ -12,4 +12,16 @@ body{
 a{
   text-decoration: none;
   display: inline-block;
+}/* Stil za kontejner */
+.map {
+  width: 100%; /* Širina će zauzeti celu dostupnu širinu */
+  height: 500px; /* Visina će biti 500 piksela, prilagodite prema potrebi */
+  margin: 0 auto; /* Centriranje po horizontali */
+  display: flex; /* Koristi flexbox za centriranje po vertikali */
+  justify-content: center; /* Centriranje sadržaja po horizontali */
+  align-items: center; /* Centriranje sadržaja po vertikali */
+}
+
+.leaflet-container{
+  height: 100vh;
 }

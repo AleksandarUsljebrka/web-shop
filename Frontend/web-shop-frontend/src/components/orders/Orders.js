@@ -78,7 +78,7 @@ const Orders = ({ data, role, button, buttonText, buttonCancel }) => {
                     </TableCell>
                     <TableCell align="center">{row.comment}</TableCell>
                     <TableCell align="center">{row.address}</TableCell>
-                    <TableCell align="center">{row.totalPrice}</TableCell>
+                    <TableCell align="center">{`$${row.totalPrice}`}</TableCell>
                     <TableCell align="center">
                       {formatDate(row.placedTime)}
                     </TableCell>

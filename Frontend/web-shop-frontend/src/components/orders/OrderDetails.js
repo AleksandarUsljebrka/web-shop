@@ -86,7 +86,7 @@ const OrderDetails = () => {
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Total Price:
           </Typography>
-          <Typography variant="body2">{order?.totalPrice}</Typography>
+          <Typography variant="body2">{`$${order?.totalPrice}`}</Typography>
 
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Remaining Time:
@@ -137,7 +137,7 @@ const OrderDetails = () => {
                           </Box>
                         </TableCell>
                         <TableCell align="center">{row.articleName}</TableCell>
-                        <TableCell align="center">{row.pricePerUnit}</TableCell>
+                        <TableCell align="center">{`$${row.pricePerUnit}`}</TableCell>
                         <TableCell align="center">{row.quantity}</TableCell>
                       </TableRow>
                     ))}

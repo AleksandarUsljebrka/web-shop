@@ -146,8 +146,8 @@ const CustomerOrder = () => {
               name="totalPrice"
               placeholder="Total Price"
               variant="outlined"
-              type="number"
-              value={totalPrice}
+              type="text"
+              value={`$${totalPrice}`}
               disabled
               inputProps={{
                 readOnly: true,
@@ -157,6 +157,7 @@ const CustomerOrder = () => {
                 },
               }}
               sx={{ marginBottom: 2, width: "100%" }}
+              helperText="Note: An additional amount for delivery is 3$."
             />
             <Container
               sx={{

@@ -34,6 +34,20 @@ const NewArticle = () => {
   const [formErrors, setFormErrors] = useState({});
   const [productImage, setArticleImage] = useState(null);
 
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    } else if (statusCode === 200 && !error) {
+      clearRequest();
+      alert('Successfully added a new article!');
+    
+    } else if (statusCode !== 200 && error) {
+      alert(statusCode, error);
+      clearRequest();
+    }
+  }, [isLoading, statusCode, error, clearRequest]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -43,8 +57,7 @@ const NewArticle = () => {
      
 
       newArticleRequest(formData);
-      navigate("/articles");
-      
+     
     } catch (errors) {
       console.log(formData);
 

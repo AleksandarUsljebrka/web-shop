@@ -21,6 +21,7 @@ import FinishedOrdersSalesman from "./pages/salesman/FinishedOrdersSalesman";
 import MyProfile from "./pages/MyProfile";
 import AllOrdersAdmin from "./pages/admin/AllOrdersAdmin";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import MapOrders from "./pages/salesman/MapOrders";
 
 function App() {
   const { loadUser, ...authContext } = useContext(AuthContext);
@@ -35,7 +36,9 @@ function App() {
   }, [loadUser]);
 
   return (
-    <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID}}>
+    <PayPalScriptProvider
+      options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}
+    >
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -113,6 +116,11 @@ function App() {
           </Route>
         )}
 
+        {approvedSalesman && (
+          <Route path="/orders-map" element={<Layout />}>
+            <Route index element={<MapOrders />} />
+          </Route>
+        )}
         {role === "customer" && (
           <Route path="/articles" element={<Layout />}>
             <Route index element={<CustomerArticles />} />

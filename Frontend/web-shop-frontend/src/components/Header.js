@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import AuthContext from "../context/AuthContext";
 import MenuIcon from "@mui/icons-material/Menu";
+import { ToastContainer } from 'react-toastify';
+
 const appBarStyles = {
   backgroundColor: "#2196F3",
 };
@@ -82,6 +84,11 @@ const Header = () => {
               Finished Orders
             </Button>
           )}
+          {approvedSalesman && (
+            <Button color="inherit" to="/orders-map" component={NavLink}>
+              Orders Map
+            </Button>
+          )}
 
           {role === "customer" && (
             <Button color="inherit" to="/articles" component={NavLink}>
@@ -118,6 +125,10 @@ const Header = () => {
           )}
         </Toolbar>
       </AppBar>
+        <ToastContainer
+        autoClose={3000}
+        toastClassName={"toaster-customization"}
+      />
     </div>
   );
 };

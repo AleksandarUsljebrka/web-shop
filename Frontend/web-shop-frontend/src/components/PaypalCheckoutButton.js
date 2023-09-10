@@ -10,7 +10,7 @@ export const PaypalCheckoutButton = ({orderPrice, isDisabled}) => {
   const [error, setError] = useState(null);
   const { setOrderPaid, ...orderContext } = useContext(OrderContext);
   //const [disable, setDisable] = useState(isDisabled);
-
+   const orderAndDelivery = orderPrice+3; 
   const handleApprove = (orderId) => {
     setPaidFor(true);
    // setOrderPaid(true);
@@ -46,7 +46,7 @@ export const PaypalCheckoutButton = ({orderPrice, isDisabled}) => {
           purchase_units: [
             {
               amount: {
-                value: orderPrice,
+                value: orderAndDelivery,
               },
             },
           ],
